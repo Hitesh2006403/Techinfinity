@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign in to EvalAI Notebook</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Kalam:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .font-handwriting {
+      font-family: 'Kalam', cursive;
+    }
+  </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#ffe16d",
+            "tertiary-fixed": "#fcdfab",
+            "tertiary-container": "#382804",
+            "on-surface-variant": "#45464d",
+            "surface-container-highest": "#e4e2de",
+            "on-tertiary-fixed": "#261900",
+            "tertiary": "#1f1400",
+            "surface-container-low": "#f5f3ef",
+            "inverse-on-surface": "#f2f0ed",
+            "on-primary-fixed": "#0f1b34",
+            "secondary-fixed-dim": "#e2c54f",
+            "primary-container": "#1f2a44",
+            "primary-fixed": "#d9e2ff",
+            "surface": "#fbf9f5",
+            "inverse-primary": "#bbc6e7",
+            "secondary-container": "#fdde65",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eae8e4",
+            "tertiary-fixed-dim": "#dfc391",
+            "on-background": "#1b1c1a",
+            "on-primary-fixed-variant": "#3b4662",
+            "on-error-container": "#93000a",
+            "surface-tint": "#535e7b",
+            "outline-variant": "#c6c6ce",
+            "surface-dim": "#dbdad6",
+            "background": "#fbf9f5",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#57441d",
+            "surface-container": "#efeeea",
+            "secondary": "#705d00",
+            "on-tertiary-container": "#a78f61",
+            "on-primary": "#ffffff",
+            "primary-fixed-dim": "#bbc6e7",
+            "surface-bright": "#fbf9f5",
+            "on-secondary-container": "#746100",
+            "surface-variant": "#e4e2de",
+            "on-secondary-fixed": "#221b00",
+            "on-secondary-fixed-variant": "#544600",
+            "inverse-surface": "#30312e",
+            "on-primary-container": "#8691b0",
+            "on-surface": "#1b1c1a",
+            "primary": "#09152e",
+            "outline": "#76777e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "margin": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Newsreader", "serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Newsreader", "serif"],
+            "display-lg-mobile": ["Newsreader", "serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "display-lg": ["Newsreader", "serif"],
+            "tabular-score": ["Inter", "sans-serif"],
+            "headline-sm": ["Newsreader", "serif"],
+            "label-md": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.005em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "500" }],
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "tabular-score": ["15px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen selection:bg-secondary-fixed selection:text-on-secondary-fixed transition-colors duration-200">
+<!-- Main Split Layout -->
+<main class="min-h-screen w-full flex flex-col lg:flex-row">
+<!-- Left Section: Authentication Form -->
+<section class="w-full lg:w-1/2 flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-8 bg-surface-container-lowest dark:bg-primary border-r border-surface-container-highest dark:border-primary-container relative">
+<!-- Top Bar: Institution Emblem & Theme Toggle -->
+<header class="flex items-center justify-between w-full pb-8">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-primary dark:bg-surface-container-low text-surface dark:text-primary flex items-center justify-center border border-outline-variant dark:border-outline">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_stories">auto_stories</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary tracking-tight block">EvalAI Notebook</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-primary-container block">Academic Evaluation Folio</span>
+</div>
+</div>
+<!-- Light/Dark Toggle -->
+<button aria-label="Toggle visual theme" class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface dark:text-on-primary-container dark:hover:text-inverse-on-surface hover:bg-surface-container-low dark:hover:bg-primary-container transition-colors duration-150 border border-transparent hover:border-surface-container-highest dark:hover:border-primary-container" id="theme-toggle" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="dark_mode" id="theme-icon">dark_mode</span>
+</button>
+</header>
+<!-- Center Container: Sign-in Form -->
+<div class="max-w-[420px] w-full mx-auto my-auto py-6">
+<!-- Title & Subtitle -->
+<div class="mb-6">
+<h1 class="font-headline-lg text-headline-lg text-primary dark:text-inverse-primary mb-2">Sign in to EvalAI Notebook</h1>
+<p class="font-body-md text-body-md text-on-surface-variant dark:text-on-primary-container">
+            Access secure examination records, moderation rubrics, and automated marginalia.
+          </p>
+</div>
+<!-- Inline Friendly Error Banner -->
+<div class="mb-5 p-3.5 rounded-xl border border-error/20 bg-error-container/40 dark:bg-error-container/10 flex items-start gap-3" role="alert">
+<span class="material-symbols-outlined text-error text-[20px] shrink-0 mt-0.5" data-icon="info">info</span>
+<div class="flex-1">
+<p class="font-body-sm text-body-sm text-error font-medium leading-relaxed">
+              The password you entered doesn't match our records. Please try again.
+            </p>
+</div>
+</div>
+<!-- Form Elements -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Institutional Email -->
+<div>
+<label class="block font-label-md text-label-md text-primary dark:text-inverse-primary mb-1.5" for="email">
+              Institutional Email address
+            </label>
+<div class="relative">
+<input class="w-full rounded-xl bg-surface-container-lowest dark:bg-primary-container border border-surface-container-highest dark:border-outline text-primary dark:text-inverse-primary font-body-md text-body-md px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-inverse-primary focus:border-primary dark:focus:border-inverse-primary transition-colors placeholder:text-outline-variant" id="email" name="email" placeholder="faculty@institution.edu" required="" type="email" value="eleanor.vane@cambridge.ac.uk"/>
+<div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant dark:text-on-primary-container">
+<span class="material-symbols-outlined text-[18px]" data-icon="school">school</span>
+</div>
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="font-label-md text-label-md text-primary dark:text-inverse-primary" for="password">
+                Password
+              </label>
+<a class="font-label-sm text-label-sm text-primary dark:text-inverse-primary hover:underline underline-offset-4" href="#">
+                Forgot password?
+              </a>
+</div>
+<div class="relative">
+<input class="w-full rounded-xl bg-surface-container-lowest dark:bg-primary-container border border-error/70 dark:border-error text-primary dark:text-inverse-primary font-body-md text-body-md px-3.5 py-2.5 focus:outline-none focus:ring-1 focus:ring-error focus:border-error transition-colors placeholder:text-outline-variant" id="password" name="password" placeholder="Enter password" required="" type="password" value="••••••••••••"/>
+<button aria-label="Toggle password visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant dark:text-on-primary-container hover:text-on-surface dark:hover:text-inverse-on-surface p-1 focus:outline-none" id="toggle-password" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Sign In Action -->
+<div class="pt-2">
+<button class="w-full py-2.5 px-4 rounded-xl bg-primary-container hover:bg-primary dark:bg-surface dark:hover:bg-surface-container text-surface dark:text-primary font-label-md text-label-md font-semibold tracking-wide border border-transparent dark:border-outline transition-all duration-150 shadow-none flex items-center justify-center gap-2" type="submit">
+<span>Sign in</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Reassurance Note -->
+<div class="mt-6 pt-5 border-t border-surface-container-highest dark:border-primary-container/80 flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary dark:text-secondary-fixed text-[18px] shrink-0" data-icon="verified_user">verified_user</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-primary-container">
+            Role detected automatically upon sign in (Teacher, Student, or Administrator)
+          </p>
+</div>
+</div>
+<!-- Left Footer: Archival Footnote -->
+<footer class="pt-6 border-t border-surface-container-highest dark:border-primary-container flex flex-wrap items-center justify-between text-on-surface-variant dark:text-on-primary-container font-label-sm text-label-sm">
+<span>Evaluation Folio System • v2.4</span>
+<div class="flex gap-4">
+<a class="hover:underline" href="#">Academic Ethics</a>
+<a class="hover:underline" href="#">FERPA Compliant</a>
+</div>
+</footer>
+</section>
+<!-- Right Section: Editorial Notebook Folio Showcase -->
+<section class="w-full lg:w-1/2 bg-surface-container-low dark:bg-primary-container flex flex-col justify-center items-center p-6 sm:p-12 lg:p-16 border-t lg:border-t-0 border-surface-container-highest dark:border-primary-container relative overflow-hidden">
+<!-- Archival Paper / Notebook Card -->
+<div class="w-full max-w-[500px] bg-surface-container-lowest dark:bg-primary rounded-xl border border-surface-container-highest dark:border-outline/40 shadow-none overflow-hidden relative">
+<!-- Notebook Folio Top Header -->
+<div class="px-6 py-4 bg-surface dark:bg-primary-container/60 border-b border-surface-container-highest dark:border-outline/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant dark:text-on-primary-container">Physics 302: Electromagnetism</span>
+<span class="text-surface-container-highest dark:text-outline">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-primary-container">Candidate #8491</span>
+</div>
+<!-- Score Stamp Badge -->
+<div class="flex items-center gap-1.5 bg-[#F2D45C] text-primary px-2.5 py-0.5 rounded-lg border border-[#E2C54F] font-tabular-score text-tabular-score font-bold shadow-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="grade">grade</span>
+<span>7/10</span>
+</div>
+</div>
+<!-- Notebook Content Area with Ruled Lines Effect -->
+<div class="p-6 sm:p-8 space-y-6 relative bg-[linear-gradient(to_bottom,transparent_27px,#f0ede6_28px)] dark:bg-[linear-gradient(to_bottom,transparent_27px,#222c44_28px)] bg-[size:100%_28px]">
+<!-- Exam Prompt -->
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-primary-container block mb-1">Item 03(b): Theoretical Formulation</span>
+<p class="font-body-md text-body-md text-primary dark:text-inverse-primary font-medium">
+              Explain the physical derivation of mutual inductance in concentric toroidal geometries.
+            </p>
+</div>
+<!-- Student Handwritten Answer Simulation -->
+<div class="p-4 rounded-xl bg-surface/80 dark:bg-primary-container/40 border border-surface-container-highest dark:border-outline/30 space-y-3">
+<div class="flex items-center justify-between text-on-surface-variant dark:text-on-primary-container font-label-sm text-label-sm">
+<span>Student Submission Excerpt</span>
+<span class="flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[13px]" data-icon="history_edu">history_edu</span>
+                Verbatim Script
+              </span>
+</div>
+<p class="font-handwriting text-lg sm:text-xl text-primary dark:text-inverse-primary leading-loose tracking-wide">
+              The mutual inductance <span class="italic font-serif font-bold text-base">M</span> between coils depends on permeability of the core and geometric coupling. It 
+              <mark class="bg-[#d1ebd7] text-[#1c4b2c] dark:bg-[#1f4a2d] dark:text-[#a5f3bf] px-1.5 py-0.5 rounded-md font-medium border-b border-[#2E7D4F]/30">relies upon Faraday's law of induction</mark> 
+              where flux linkage in coil 2 induces EMF proportional to <span class="italic font-serif">dI₁/dt</span>.
+            </p>
+</div>
+<!-- Inspector Marginalia / Annotation Card -->
+<div class="border-l-2 border-[#2E7D4F] pl-3.5 py-1 text-on-surface">
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-[#2E7D4F]"></span>
+<span class="font-label-sm text-label-sm text-[#2E7D4F] dark:text-[#6ee7b7] font-semibold">Teacher Verification Validated</span>
+<span class="text-on-surface-variant dark:text-on-primary-container font-label-sm text-label-sm ml-auto">Rubric §4.2</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-on-primary-container leading-relaxed">
+              Standard conceptual linkage recognized. AI-identified inductive derivation confirmed by departmental reviewer.
+            </p>
+</div>
+</div>
+<!-- Notebook Bottom Status Footer -->
+<div class="px-6 py-3 bg-surface-container-low dark:bg-primary-container/40 border-t border-surface-container-highest dark:border-outline/30 flex items-center justify-between text-on-surface-variant dark:text-on-primary-container font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary dark:text-secondary-fixed" data-icon="ink_highlighter">ink_highlighter</span>
+<span>Rubric: Electromagnetic Principles</span>
+</div>
+<span class="font-tabular-score">Moderated: 14:02 UTC</span>
+</div>
+</div>
+<!-- Folio Caption Note Below Card -->
+<div class="mt-8 text-center max-w-md">
+<p class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary italic mb-1">
+          "Fair, transparent evaluation assisted by AI, governed by teachers."
+        </p>
+<span class="font-label-sm text-label-sm text-on-surface-variant dark:text-on-primary-container">
+          Notebook folios preserve instructor agency across every annotated script.
+        </span>
+</div>
+</section>
+</main>
+<!-- Interactive script for Theme Toggle & Micro-interactions -->
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlElement = document.documentElement;
+
+    // Theme Toggle Functionality
+    themeToggleBtn.addEventListener('click', () => {
+      const isDark = htmlElement.classList.toggle('dark');
+      if (isDark) {
+        themeIcon.textContent = 'light_mode';
+        htmlElement.classList.remove('light');
+      } else {
+        themeIcon.textContent = 'dark_mode';
+        htmlElement.classList.add('light');
+      }
+    });
+
+    // Password visibility toggle micro-interaction
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    if (togglePasswordBtn && passwordInput) {
+      togglePasswordBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        const iconSpan = togglePasswordBtn.querySelector('.material-symbols-outlined');
+        if (iconSpan) {
+          iconSpan.textContent = isPassword ? 'visibility_off' : 'visibility';
+        }
+      });
+    }
+  </script>
+</body></html>

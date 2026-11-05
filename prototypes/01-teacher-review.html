@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EvalAI — Teacher Review Workbench</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-container": "#4d9b6a",
+            "surface-container-high": "#eae8e4",
+            "secondary-fixed": "#ffe16d",
+            "on-primary-fixed-variant": "#414657",
+            "tertiary-fixed-dim": "#88d7a1",
+            "primary": "#080f1d",
+            "on-secondary-fixed": "#221b00",
+            "primary-container": "#1e2433",
+            "background": "#fbf9f5",
+            "inverse-primary": "#c0c6da",
+            "secondary-container": "#fdde65",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#00210f",
+            "outline-variant": "#c6c6cc",
+            "on-secondary-fixed-variant": "#544600",
+            "outline": "#76777d",
+            "on-secondary": "#ffffff",
+            "surface": "#fbf9f5",
+            "error": "#ba1a1a",
+            "secondary": "#705d00",
+            "on-surface": "#1b1c1a",
+            "on-background": "#1b1c1a",
+            "primary-fixed-dim": "#c0c6da",
+            "surface-container-highest": "#e4e2de",
+            "on-tertiary-fixed-variant": "#00522c",
+            "tertiary-fixed": "#a4f4bc",
+            "surface-bright": "#fbf9f5",
+            "on-surface-variant": "#45464c",
+            "on-primary-fixed": "#151b2a",
+            "on-error": "#ffffff",
+            "inverse-surface": "#30312e",
+            "on-primary": "#ffffff",
+            "surface-container": "#efeeea",
+            "surface-tint": "#585e6f",
+            "secondary-fixed-dim": "#e2c54f",
+            "inverse-on-surface": "#f2f0ed",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#746100",
+            "surface-variant": "#e4e2de",
+            "tertiary-container": "#002b15",
+            "on-primary-container": "#858b9e",
+            "tertiary": "#001306",
+            "surface-container-low": "#f5f3ef",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#dbdad6",
+            "primary-fixed": "#dde2f7",
+            "error-container": "#ffdad6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "gutter": "1.5rem",
+            "margin-mobile": "1rem",
+            "margin": "2.5rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Newsreader", "serif"],
+            "tabular-score": ["DM Sans", "sans-serif"],
+            "body-sm": ["DM Sans", "sans-serif"],
+            "headline-md": ["Newsreader", "serif"],
+            "body-md": ["DM Sans", "sans-serif"],
+            "display": ["Newsreader", "serif"],
+            "body-lg": ["DM Sans", "sans-serif"],
+            "headline-sm": ["Newsreader", "serif"],
+            "title-md": ["DM Sans", "sans-serif"],
+            "headline-lg": ["Newsreader", "serif"],
+            "label-caps": ["DM Sans", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "tabular-score": ["15px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "display": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+            "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Academic Notebook Margin rule effect */
+    .ledger-paper-line {
+      background-image: linear-gradient(to bottom, transparent 96%, rgba(228, 226, 222, 0.45) 96%);
+      background-size: 100% 28px;
+    }
+    .dark .ledger-paper-line {
+      background-image: linear-gradient(to bottom, transparent 96%, rgba(198, 198, 204, 0.08) 96%);
+      background-size: 100% 28px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md text-body-md transition-colors duration-200">
+<!-- ========================================================================= -->
+<!-- 1. LEFT PERSISTENT SIDENAVBAR (Shared Component Blueprint)                 -->
+<!-- ========================================================================= -->
+<aside aria-label="Main Navigation" class="fixed inset-y-0 left-0 w-64 flex flex-col z-30 bg-surface-container-low dark:bg-surface-container border-r border-surface-container-highest dark:border-outline-variant transition-colors duration-200">
+<div class="h-full flex flex-col justify-between p-4">
+<!-- Brand & Top CTAs -->
+<div>
+<!-- Brand Header -->
+<div class="flex items-center gap-3 px-2 py-3 mb-4">
+<div class="w-9 h-9 rounded bg-primary-container text-surface-container-lowest flex items-center justify-center font-headline-sm text-headline-sm font-semibold tracking-tight shadow-sm">
+<span>E</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-medium text-primary dark:text-primary-fixed leading-tight">EvalAI</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">Academic Evaluation</div>
+</div>
+</div>
+<!-- Global Action Button -->
+<button class="w-full mb-6 flex items-center justify-center gap-2 py-2 px-3 bg-primary-container dark:bg-primary-fixed text-surface-container-lowest dark:text-primary rounded font-title-md text-title-md hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+<span>New Evaluation</span>
+</button>
+<!-- Navigation Links -->
+<nav class="space-y-1">
+<!-- Item 1: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Item 2: Exams -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="assignment">assignment</span>
+<span>Exams</span>
+</a>
+<!-- Item 3: Marking & Reviews (ACTIVE) -->
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2 text-primary dark:text-primary-fixed bg-surface-container-highest dark:bg-primary-container rounded font-title-md text-title-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl fill-icon" data-icon="rate_review">rate_review</span>
+<span>Marking &amp; Reviews</span>
+</a>
+<!-- Item 4: Results -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="analytics">analytics</span>
+<span>Results</span>
+</a>
+<!-- Item 5: Learning Assistant -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="psychology">psychology</span>
+<span>Learning Assistant</span>
+</a>
+<!-- Item 6: Users / Admin -->
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="manage_accounts">manage_accounts</span>
+<span>Users / Admin</span>
+</a>
+</nav>
+</div>
+<!-- Navigation Footer & Interactive Theme Toggle -->
+<div class="pt-4 border-t border-surface-container-highest dark:border-outline-variant/30 space-y-2">
+<!-- Theme Toggle Interactive Control -->
+<div class="flex items-center justify-between px-3 py-2 rounded bg-surface-container dark:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-lg" data-icon="dark_mode" id="theme-icon">dark_mode</span>
+<span>Appearance</span>
+</div>
+<button aria-checked="false" class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out bg-surface-container-highest dark:bg-primary" id="theme-toggle-btn" role="switch" title="Toggle Light/Dark Mode">
+<span class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-surface-container-lowest shadow-sm ring-0 transition duration-200 ease-in-out translate-x-0 dark:translate-x-5" id="theme-toggle-indicator"></span>
+</button>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface hover:bg-surface-container dark:hover:bg-primary-container rounded font-body-md text-body-md transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<!-- Evaluator Mini Profile -->
+<div class="flex items-center gap-3 px-2 pt-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-outline-variant/30 flex items-center justify-center text-primary dark:text-primary-fixed font-title-md text-title-md">
+            JH
+          </div>
+<div class="overflow-hidden">
+<p class="font-title-md text-body-sm truncate text-on-surface">Prof. J. Harrington</p>
+<p class="font-body-sm text-body-sm truncate text-on-surface-variant">Dept. of Electrical Eng.</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- 2. TOP DOCKED APP BAR (Shared Component Blueprint)                        -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 right-0 left-64 h-14 bg-surface-container-lowest dark:bg-surface-container-low border-b border-surface-container-highest dark:border-outline-variant z-20 flex items-center justify-between px-6 transition-colors duration-200">
+<!-- Academic Context Breadcrumb -->
+<div class="flex items-center gap-2 text-on-surface-variant dark:text-outline-variant overflow-hidden">
+<span class="font-title-md text-body-md text-on-surface dark:text-inverse-on-surface font-medium truncate">Basic Electrical Engineering — Mid-term 2024</span>
+<span class="material-symbols-outlined text-sm shrink-0" data-icon="chevron_right">chevron_right</span>
+<span class="font-body-md text-body-md truncate">Q2: Transformer Working Principle</span>
+<span class="material-symbols-outlined text-sm shrink-0" data-icon="chevron_right">chevron_right</span>
+<div class="flex items-center gap-2 bg-surface-container dark:bg-surface-container-high px-2 py-0.5 rounded text-on-surface dark:text-inverse-on-surface font-title-md text-body-sm shrink-0">
+<span class="material-symbols-outlined text-sm text-primary dark:text-primary-fixed" data-icon="person">person</span>
+<span>Aarav Sharma</span>
+<span class="text-on-surface-variant dark:text-outline-variant font-mono text-[11px]">(EE-2024-042)</span>
+</div>
+</div>
+<!-- Candidate Navigation & Actions -->
+<div class="flex items-center gap-3 shrink-0">
+<!-- Fast Student Pagination -->
+<div class="flex items-center border border-surface-container-highest dark:border-outline-variant rounded divide-x divide-surface-container-highest dark:divide-outline-variant">
+<button class="px-2 py-1 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container transition-colors" title="Previous Student">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="px-2.5 py-1 font-body-sm text-body-sm text-on-surface-variant font-mono">14 / 68</span>
+<button class="px-2 py-1 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container transition-colors" title="Next Student">
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<button class="px-3 py-1.5 border border-surface-container-highest dark:border-outline-variant rounded font-title-md text-body-sm text-on-surface dark:text-inverse-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container transition-colors">
+        Save Draft
+      </button>
+<button class="px-3 py-1.5 bg-primary-container dark:bg-primary-fixed text-surface-container-lowest dark:text-primary rounded font-title-md text-body-sm hover:bg-primary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="task_alt">task_alt</span>
+<span>Publish Marks</span>
+</button>
+<div class="flex items-center gap-1 pl-2 border-l border-surface-container-highest dark:border-outline-variant text-on-surface-variant">
+<button class="p-1.5 hover:text-on-surface transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+</button>
+<button class="p-1.5 hover:text-on-surface transition-colors" title="Documentation">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- 3. SPLIT WORKBENCH CANVAS                                                 -->
+<!-- ========================================================================= -->
+<main class="ml-64 pt-14 min-h-screen bg-background dark:bg-primary p-6">
+<div class="max-w-[1560px] mx-auto grid grid-cols-12 gap-6 items-start">
+<!-- ===================================================================== -->
+<!-- LEFT PANEL: Student Submission Evidence (5 Columns)                   -->
+<!-- ===================================================================== -->
+<section class="col-span-12 lg:col-span-5 space-y-4">
+<!-- Submission Meta Header -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface">Student Answer — Aarav Sharma</h1>
+<span class="px-2 py-0.5 rounded bg-tertiary-fixed/30 text-on-tertiary-container dark:text-tertiary-fixed font-label-caps text-label-caps border border-tertiary-fixed-dim/40 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs fill-icon" data-icon="verified">verified</span>
+                  Handwritten OCR Verified
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant mt-1">
+                Submitted today at 10:14 AM • Assessment Room B-12 • Script ID: <span class="font-mono">#SCR-88192</span>
+</p>
+</div>
+<!-- View Switcher Toggle -->
+<div class="flex items-center gap-1 bg-surface-container dark:bg-surface-container-high p-1 rounded">
+<button class="px-2.5 py-1 text-xs font-title-md rounded bg-surface-container-lowest dark:bg-primary-container text-on-surface dark:text-inverse-on-surface shadow-xs transition-all" id="view-ocr-btn">
+                OCR Transcribed
+              </button>
+<button class="px-2.5 py-1 text-xs font-title-md rounded text-on-surface-variant dark:text-outline-variant hover:text-on-surface transition-all" id="view-scan-btn">
+                Scan Sheet
+              </button>
+</div>
+</div>
+<!-- Question Definition Box -->
+<div class="mt-4 p-3 bg-surface-container-low dark:bg-surface-container rounded border-l-2 border-primary-container dark:border-primary-fixed">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant dark:text-outline-variant tracking-wider uppercase">Question 2 Prompt</span>
+<span class="font-tabular-score text-body-sm text-on-surface dark:text-inverse-on-surface">Total: 10 marks</span>
+</div>
+<p class="font-headline-sm text-[16px] leading-snug text-primary dark:text-inverse-on-surface italic">
+              "Explain the working principle of a single-phase transformer with core flux relationships and derive the standard EMF equation. Include step-by-step turns ratio logic."
+            </p>
+</div>
+</div>
+<!-- Student Paper Transcription Sheet -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-6 shadow-sm relative overflow-hidden ledger-paper-line min-h-[580px]">
+<!-- Editorial Ledger Top Margin -->
+<div class="flex items-center justify-between pb-3 mb-4 border-b border-surface-container-highest dark:border-outline-variant text-on-surface-variant font-body-sm">
+<span class="font-mono text-xs text-outline">FOLIO SHEET 02 // CANDIDATE INK RECORD</span>
+<div class="flex items-center gap-3 text-xs">
+<span class="flex items-center gap-1 text-[#2E7D4F] dark:text-tertiary-fixed">
+<span class="w-2 h-2 rounded-full bg-[#2E7D4F]"></span> Correct Concept
+              </span>
+<span class="flex items-center gap-1 text-[#B7791F] dark:text-secondary-fixed">
+<span class="w-2 h-2 rounded-full bg-[#B7791F]"></span> Incomplete
+              </span>
+<span class="flex items-center gap-1 text-[#B3372F] dark:text-error">
+<span class="w-2 h-2 rounded-full bg-[#B3372F]"></span> Calculation Error
+              </span>
+</div>
+</div>
+<!-- Answer Body with Exact Precision Typographic Highlights -->
+<div class="space-y-5 font-body-lg text-body-lg text-on-surface dark:text-inverse-on-surface leading-relaxed">
+<div>
+<span class="font-title-md text-xs text-outline tracking-wider block mb-1">1. OPERATING MECHANISM</span>
+<p>
+                A transformer is a static machine used to transfer alternating electrical energy from one circuit to another at constant frequency. 
+                <mark class="bg-[#2E7D4F]/10 dark:bg-[#2E7D4F]/25 text-[#2E7D4F] dark:text-tertiary-fixed px-1.5 py-0.5 rounded border border-[#2E7D4F]/30 font-medium">
+                  The fundamental operation relies upon Faraday's law of electromagnetic induction and mutual induction between two magnetically coupled stationary windings.
+                </mark>
+                When an alternating voltage $V_1$ is supplied across the primary winding, it sets up an alternating magnetizing current $I_\mu$.
+              </p>
+</div>
+<div>
+<span class="font-title-md text-xs text-outline tracking-wider block mb-1">2. CORE FLUX PHENOMENOLOGY</span>
+<p>
+                This exciting current drives a continuous sinusoidal magnetic flux $\Phi(t) = \Phi_m \sin(\omega t)$ through the laminated silicon steel core. 
+                <mark class="bg-[#B7791F]/10 dark:bg-[#B7791F]/20 text-[#B7791F] dark:text-secondary-fixed-dim px-1.5 py-0.5 rounded border border-[#B7791F]/30">
+                  This magnetic flux travels around the magnetic circuit linking completely with both the primary turns $N_1$ and secondary turns $N_2$.
+                </mark>
+                The core has high permeability $\mu_r$ and offers very low reluctance path to the mutual magnetic lines of force.
+              </p>
+</div>
+<div>
+<span class="font-title-md text-xs text-outline tracking-wider block mb-1">3. EMF DERIVATION &amp; TURNS RATIO</span>
+<p>
+                By rate of change of flux linkages, the instantaneous induced electromotive force in the primary is given by $e_1 = -N_1 \frac{d\Phi}{dt} = -N_1 \omega \Phi_m \cos(\omega t)$.
+                Its RMS value is:
+              </p>
+<!-- Math block -->
+<div class="my-2 p-3 bg-surface-container-low dark:bg-surface-container rounded font-mono text-sm border border-surface-container-highest dark:border-outline-variant flex justify-between items-center">
+<span>$E_1 = 4.44 \cdot f \cdot N_1 \cdot \Phi_m$  and  $E_2 = 4.44 \cdot f \cdot N_2 \cdot \Phi_m$</span>
+<span class="text-xs text-[#2E7D4F] font-sans font-medium">Valid Derivation</span>
+</div>
+<p>
+                Therefore taking the transformation voltage ratio:
+                <mark class="bg-[#B3372F]/10 dark:bg-[#B3372F]/20 text-[#B3372F] dark:text-error-container px-1.5 py-0.5 rounded border border-[#B3372F]/30 font-medium inline-block mt-1">
+                  Step 3: $\frac{E_2}{E_1} = \frac{N_1}{N_2} = K$  (Hence secondary voltage scales inversed to turns ratio)
+                </mark>
+</p>
+</div>
+<!-- OCR Margin Note Component -->
+<div class="mt-6 p-3.5 bg-[#FDFCFA] dark:bg-surface-container-high rounded border-l-4 border-secondary-container dark:border-secondary-fixed shadow-xs">
+<div class="flex items-center gap-2 text-xs font-title-md text-primary dark:text-primary-fixed mb-1">
+<span class="material-symbols-outlined text-sm text-[#705d00] dark:text-secondary-fixed" data-icon="edit_note">edit_note</span>
+<span>Marginalia Note — OCR Optical Engine</span>
+</div>
+<p class="font-headline-sm text-body-sm text-on-surface-variant dark:text-inverse-on-surface italic">
+                In step 3, handwriting indicates numerator $N_1$ over $N_2$ explicitly circled in blue ink on original paper margin. No secondary correction noted.
+              </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- RIGHT PANEL: Marking Rubric & AI Provisional Review (7 Columns)       -->
+<!-- ===================================================================== -->
+<section class="col-span-12 lg:col-span-7 space-y-4">
+<!-- AI Confidence & Provisional Notice Banner -->
+<div class="p-4 rounded-xl border border-dashed border-[#E6E2DA] dark:border-outline-variant/60 bg-surface-container-low/70 dark:bg-surface-container/60 relative">
+<div class="flex items-start gap-3">
+<div class="p-2 rounded bg-secondary-container text-on-secondary-container dark:bg-secondary dark:text-secondary-fixed mt-0.5">
+<span class="material-symbols-outlined text-lg" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface">Provisional – awaiting teacher review</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest dark:bg-surface-container-high text-on-surface-variant font-label-caps text-[10px] uppercase">Model: Claude 3.5 Academic</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant mt-1 leading-relaxed">
+                AI provisional scores are algorithmic recommendations derived from standard syllabus criteria. Final academic authority and grade assignment reside strictly with the teacher.
+              </p>
+</div>
+<div class="text-right shrink-0">
+<span class="text-xs font-title-md text-on-surface-variant block">AI Baseline</span>
+<span class="font-tabular-score text-title-md text-on-surface font-mono">7.5 / 10</span>
+</div>
+</div>
+</div>
+<!-- Concept Summary Chips -->
+<div class="flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant">
+<span class="font-title-md text-body-sm text-on-surface-variant dark:text-outline-variant">Concept Detection Breakdown</span>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-[#2E7D4F]/10 dark:bg-[#2E7D4F]/25 text-[#2E7D4F] dark:text-tertiary-fixed text-xs font-medium border border-[#2E7D4F]/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span>
+              Correct (4)
+            </span>
+<span class="px-2.5 py-1 rounded bg-[#B7791F]/10 dark:bg-[#B7791F]/25 text-[#B7791F] dark:text-secondary-fixed-dim text-xs font-medium border border-[#B7791F]/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" data-icon="warning">warning</span>
+              Needs Clarification (1)
+            </span>
+<span class="px-2.5 py-1 rounded bg-[#B3372F]/10 dark:bg-[#B3372F]/25 text-[#B3372F] dark:text-error-container text-xs font-medium border border-[#B3372F]/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" data-icon="error">error</span>
+              Inaccurate (1)
+            </span>
+</div>
+</div>
+<!-- Rubric Criteria Cards Container -->
+<div class="space-y-3.5">
+<!-- Criterion 1 -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 transition-all hover:border-outline/40">
+<div class="flex items-start justify-between pb-3 border-b border-surface-container-highest dark:border-outline-variant/50">
+<div>
+<span class="font-label-caps text-label-caps text-outline tracking-wider uppercase">RUBRIC CRITERION 1</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mt-0.5">Working Principle &amp; Induction Law</h2>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="text-[10px] text-on-surface-variant font-label-caps uppercase block">AI Suggested</span>
+<span class="px-2 py-0.5 rounded-full border border-dashed border-[#F2D45C] bg-[#F2D45C]/15 text-[#746100] dark:text-secondary-fixed font-tabular-score text-xs font-bold font-mono">
+                    4.0 / 4
+                  </span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest dark:bg-outline-variant"></div>
+<div>
+<label class="text-[10px] text-on-surface-variant font-label-caps uppercase block">Teacher Mark</label>
+<div class="flex items-center gap-1 mt-0.5">
+<input class="criterion-score w-14 h-8 px-2 py-1 text-center font-tabular-score text-title-md font-bold text-on-surface bg-surface-container-low dark:bg-surface-container rounded border border-surface-container-highest dark:border-outline-variant focus:border-primary dark:focus:border-primary-fixed focus:outline-none" max="4" min="0" step="0.5" type="number" value="4.0"/>
+<span class="text-xs text-on-surface-variant">/ 4</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-base text-[#2E7D4F] dark:text-tertiary-fixed shrink-0 mt-0.5" data-icon="check">check</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">
+<strong class="text-on-surface dark:text-inverse-on-surface font-title-md">AI Rationale:</strong> Accurately articulated Faraday's law and mutual induction phenomenon. Correct distinction between stationary windings and magnetic core flux linkage.
+              </p>
+</div>
+</div>
+<!-- Criterion 2 -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 transition-all hover:border-outline/40">
+<div class="flex items-start justify-between pb-3 border-b border-surface-container-highest dark:border-outline-variant/50">
+<div>
+<span class="font-label-caps text-label-caps text-outline tracking-wider uppercase">RUBRIC CRITERION 2</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mt-0.5">Core Magnetic Flux Linkage</h2>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="text-[10px] text-on-surface-variant font-label-caps uppercase block">AI Suggested</span>
+<span class="px-2 py-0.5 rounded-full border border-dashed border-[#F2D45C] bg-[#F2D45C]/15 text-[#746100] dark:text-secondary-fixed font-tabular-score text-xs font-bold font-mono">
+                    2.0 / 3
+                  </span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest dark:bg-outline-variant"></div>
+<div>
+<label class="text-[10px] text-on-surface-variant font-label-caps uppercase block">Teacher Mark</label>
+<div class="flex items-center gap-1 mt-0.5">
+<input class="criterion-score w-14 h-8 px-2 py-1 text-center font-tabular-score text-title-md font-bold text-on-surface bg-surface-container-low dark:bg-surface-container rounded border border-secondary-container dark:border-secondary-fixed focus:border-primary dark:focus:border-primary-fixed focus:outline-none" max="3" min="0" step="0.5" type="number" value="2.5"/>
+<span class="text-xs text-on-surface-variant">/ 3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-base text-[#B7791F] dark:text-secondary-fixed shrink-0 mt-0.5" data-icon="info">info</span>
+<div class="text-body-sm font-body-sm text-on-surface-variant dark:text-outline-variant space-y-1">
+<p>
+<strong class="text-on-surface dark:text-inverse-on-surface font-title-md">AI Rationale:</strong> Mentioned mutual flux and reluctance but omitted discussion on core saturation and negligible leakage flux assumptions.
+                </p>
+<p class="text-xs text-[#705d00] dark:text-secondary-fixed italic">
+<strong>Teacher note appended:</strong> +0.5 awarded as student noted sinusoidal waveform $\Phi(t) = \Phi_m \sin(\omega t)$ explicitly.
+                </p>
+</div>
+</div>
+</div>
+<!-- Criterion 3 -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 transition-all hover:border-outline/40">
+<div class="flex items-start justify-between pb-3 border-b border-surface-container-highest dark:border-outline-variant/50">
+<div>
+<span class="font-label-caps text-label-caps text-outline tracking-wider uppercase">RUBRIC CRITERION 3</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface dark:text-inverse-on-surface mt-0.5">EMF Equation &amp; Turns Ratio</h2>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="text-[10px] text-on-surface-variant font-label-caps uppercase block">AI Suggested</span>
+<span class="px-2 py-0.5 rounded-full border border-dashed border-[#F2D45C] bg-[#F2D45C]/15 text-[#746100] dark:text-secondary-fixed font-tabular-score text-xs font-bold font-mono">
+                    1.5 / 3
+                  </span>
+</div>
+<div class="w-px h-8 bg-surface-container-highest dark:bg-outline-variant"></div>
+<div>
+<label class="text-[10px] text-on-surface-variant font-label-caps uppercase block">Teacher Mark</label>
+<div class="flex items-center gap-1 mt-0.5">
+<input class="criterion-score w-14 h-8 px-2 py-1 text-center font-tabular-score text-title-md font-bold text-on-surface bg-surface-container-low dark:bg-surface-container rounded border border-surface-container-highest dark:border-outline-variant focus:border-primary dark:focus:border-primary-fixed focus:outline-none" max="3" min="0" step="0.5" type="number" value="1.5"/>
+<span class="text-xs text-on-surface-variant">/ 3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-base text-[#B3372F] dark:text-error shrink-0 mt-0.5" data-icon="close">close</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">
+<strong class="text-on-surface dark:text-inverse-on-surface font-title-md">AI Rationale:</strong> Correct primary derivation ($4.44 f N \Phi$), but inverted secondary turns ratio in final concluding equation ($\frac{E_2}{E_1} \ne \frac{N_1}{N_2}$). Deducted 1.5 marks.
+              </p>
+</div>
+</div>
+</div>
+<!-- Teacher Feedback Comments Area -->
+<div class="bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<label class="font-title-md text-title-md text-on-surface dark:text-inverse-on-surface flex items-center gap-2" for="teacher-feedback">
+<span class="material-symbols-outlined text-lg" data-icon="comment">comment</span>
+              Formal Evaluator Commentary
+            </label>
+<span class="text-xs font-body-sm text-on-surface-variant">Visible on student ledger report</span>
+</div>
+<textarea class="w-full p-3 bg-surface-container-low dark:bg-surface-container text-on-surface dark:text-inverse-on-surface rounded border border-surface-container-highest dark:border-outline-variant font-headline-sm text-body-md focus:border-primary dark:focus:border-primary-fixed focus:outline-none resize-none leading-relaxed" id="teacher-feedback" placeholder="Add editorial commentary..." rows="3">Good intuitive grasp of induction principles and clean Faraday formulation. Take special care with ideal transformer voltage/turns ratio definitions before final examinations.</textarea>
+<div class="flex items-center justify-between mt-2 text-xs text-on-surface-variant">
+<div class="flex items-center gap-2">
+<button class="px-2 py-1 rounded bg-surface-container dark:bg-surface-container-high hover:text-on-surface transition-colors">Insert standard formula note</button>
+<button class="px-2 py-1 rounded bg-surface-container dark:bg-surface-container-high hover:text-on-surface transition-colors">+ Commend effort</button>
+</div>
+<span>Signed: Prof. J. Harrington</span>
+</div>
+</div>
+<!-- Sticky Total Score & Final Action Bar -->
+<div class="sticky bottom-4 z-10 bg-surface-container-lowest dark:bg-surface-container-low rounded-xl border border-surface-container-highest dark:border-outline-variant p-4 shadow-lg flex items-center justify-between backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<!-- Highlighter Score Badge -->
+<div class="px-4 py-2 rounded bg-secondary-container dark:bg-[#F2D45C] text-[#1E2433] shadow-xs flex items-baseline gap-1.5">
+<span class="font-headline-lg text-headline-lg font-bold font-mono tracking-tight" id="calculated-total">8.0</span>
+<span class="text-xs font-bold uppercase tracking-wider font-tabular-score">/ 10 marks</span>
+</div>
+<div>
+<span class="text-xs font-title-md text-on-surface dark:text-inverse-on-surface block">Final Score (Teacher Overridden)</span>
+<span class="text-xs text-on-surface-variant dark:text-outline-variant">+0.5 variance from AI draft baseline</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 border border-surface-container-highest dark:border-outline-variant text-on-surface-variant dark:text-outline-variant hover:text-error hover:border-error/40 rounded font-title-md text-body-sm transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="replay">replay</span>
+<span>Return for correction</span>
+</button>
+<button class="px-3.5 py-2 border border-surface-container-highest dark:border-outline-variant text-on-surface dark:text-inverse-on-surface bg-surface-container-lowest dark:bg-surface-container rounded font-title-md text-body-sm hover:bg-surface-container-low transition-colors">
+              Save Draft
+            </button>
+<!-- Primary Navy Action Button with Teacher Emblem -->
+<button class="px-4 py-2 bg-primary dark:bg-primary-fixed text-surface-container-lowest dark:text-primary rounded font-title-md text-body-sm hover:bg-primary-container dark:hover:bg-primary-fixed-dim transition-all shadow-sm flex items-center gap-2" id="publish-btn">
+<span class="material-symbols-outlined text-base fill-icon" data-icon="draw">draw</span>
+<span>Approve &amp; Publish Result</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- 4. CLIENT JAVASCRIPT: THEME TOGGLE & SCORE RECALCULATION MICRO-INTERACTIONS -->
+<!-- ========================================================================= -->
+<script>
+    // 1. Interactive Theme Toggle Implementation
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    function applyTheme(isDark) {
+      if (isDark) {
+        htmlEl.classList.add('dark');
+        themeToggleBtn.setAttribute('aria-checked', 'true');
+        themeIcon.textContent = 'light_mode';
+      } else {
+        htmlEl.classList.remove('dark');
+        themeToggleBtn.setAttribute('aria-checked', 'false');
+        themeIcon.textContent = 'dark_mode';
+      }
+    }
+
+    // Default to light mode as requested, but allow user toggle
+    themeToggleBtn.addEventListener('click', () => {
+      const isCurrentlyDark = htmlEl.classList.contains('dark');
+      applyTheme(!isCurrentlyDark);
+    });
+
+    // 2. Score Recalculation Listener
+    const scoreInputs = document.querySelectorAll('.criterion-score');
+    const totalDisplay = document.getElementById('calculated-total');
+
+    function updateTotalScore() {
+      let sum = 0;
+      scoreInputs.forEach(input => {
+        const val = parseFloat(input.value) || 0;
+        sum += val;
+      });
+      totalDisplay.textContent = sum.toFixed(1);
+    }
+
+    scoreInputs.forEach(input => {
+      input.addEventListener('input', updateTotalScore);
+    });
+
+    // 3. Scan vs OCR Switcher Toggle
+    const ocrBtn = document.getElementById('view-ocr-btn');
+    const scanBtn = document.getElementById('view-scan-btn');
+
+    scanBtn.addEventListener('click', () => {
+      scanBtn.classList.add('bg-surface-container-lowest', 'dark:bg-primary-container', 'text-on-surface', 'dark:text-inverse-on-surface', 'shadow-xs');
+      scanBtn.classList.remove('text-on-surface-variant', 'dark:text-outline-variant');
+      
+      ocrBtn.classList.remove('bg-surface-container-lowest', 'dark:bg-primary-container', 'text-on-surface', 'dark:text-inverse-on-surface', 'shadow-xs');
+      ocrBtn.classList.add('text-on-surface-variant', 'dark:text-outline-variant');
+    });
+
+    ocrBtn.addEventListener('click', () => {
+      ocrBtn.classList.add('bg-surface-container-lowest', 'dark:bg-primary-container', 'text-on-surface', 'dark:text-inverse-on-surface', 'shadow-xs');
+      ocrBtn.classList.remove('text-on-surface-variant', 'dark:text-outline-variant');
+      
+      scanBtn.classList.remove('bg-surface-container-lowest', 'dark:bg-primary-container', 'text-on-surface', 'dark:text-inverse-on-surface', 'shadow-xs');
+      scanBtn.classList.add('text-on-surface-variant', 'dark:text-outline-variant');
+    });
+
+    // 4. Publish Action Microinteraction feedback
+    const publishBtn = document.getElementById('publish-btn');
+    publishBtn.addEventListener('click', () => {
+      const originalHTML = publishBtn.innerHTML;
+      publishBtn.innerHTML = `<span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span><span>Marks Published!</span>`;
+      publishBtn.classList.add('bg-[#2E7D4F]', 'text-white');
+      setTimeout(() => {
+        publishBtn.innerHTML = originalHTML;
+        publishBtn.classList.remove('bg-[#2E7D4F]', 'text-white');
+      }, 2200);
+    });
+  </script>
+</body></html>

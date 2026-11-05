@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduInfinity — Institutional Evaluation Portals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fbf9f5] text-[#1b1c1a] font-['DM_Sans',sans-serif] min-h-screen p-6 md:p-12">
+  <div class="max-w-5xl mx-auto space-y-10">
+    <!-- Header -->
+    <header class="border-b border-[#e4e2de] pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[#09152e] text-white flex items-center justify-center font-bold font-['Newsreader',serif] text-2xl shadow-sm">
+          E
+        </div>
+        <div>
+          <h1 class="text-3xl font-medium font-['Newsreader',serif] text-[#09152e]">EduInfinity Portals & Workspaces</h1>
+          <p class="text-xs text-[#76777d]">Explainable Automated Descriptive Answer Evaluation Platform</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="http://localhost:5173/" class="px-4 py-2 bg-[#09152e] text-white text-xs font-semibold rounded-xl hover:bg-[#1f2a44] transition-all shadow-sm flex items-center gap-1.5">
+          <span>Launch React App (Port 5173)</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- 3 Portals Showcase -->
+    <div>
+      <div class="mb-4">
+        <h2 class="text-xl font-['Newsreader',serif] font-medium text-[#09152e]">Live Portals (React Application)</h2>
+        <p class="text-xs text-[#76777d]">Choose a dedicated institutional portal below to access the live interactive app.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 1. Teacher Portal -->
+        <a href="http://localhost:5173/login/teacher" class="block p-6 bg-white rounded-2xl border-2 border-[#e4e2de] hover:border-[#09152e] hover:shadow-lg transition-all group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#f2d45c]/25 text-[#746100] border border-[#f2d45c]/40">Teacher Portal</span>
+            <span class="text-xs font-mono text-[#76777d]">/login/teacher</span>
+          </div>
+          <h3 class="text-xl font-['Newsreader',serif] font-medium text-[#09152e] group-hover:text-blue-700">Faculty Examiner Portal</h3>
+          <p class="text-xs text-[#45464d] mt-2 leading-relaxed">
+            Split-screen OCR verification workbench, 10/10 point dynamic rubric builder, and non-destructive grading.
+          </p>
+          <div class="mt-6 pt-4 border-t border-[#efeeea] flex items-center justify-between text-xs text-blue-600 font-semibold">
+            <span>Open Faculty Login</span>
+            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+
+        <!-- 2. Student Portal -->
+        <a href="http://localhost:5173/login/student" class="block p-6 bg-white rounded-2xl border-2 border-[#e4e2de] hover:border-[#2e7d4f] hover:shadow-lg transition-all group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#2e7d4f]/15 text-[#2e7d4f] border border-[#2e7d4f]/30">Student Portal</span>
+            <span class="text-xs font-mono text-[#76777d]">/login/student</span>
+          </div>
+          <h3 class="text-xl font-['Newsreader',serif] font-medium text-[#09152e] group-hover:text-[#2e7d4f]">Student Candidate Portal</h3>
+          <p class="text-xs text-[#45464d] mt-2 leading-relaxed">
+            Timed descriptive assessments, handwritten scan uploads, 5-phase evaluation tracker, and official result folios.
+          </p>
+          <div class="mt-6 pt-4 border-t border-[#efeeea] flex items-center justify-between text-xs text-[#2e7d4f] font-semibold">
+            <span>Open Student Login</span>
+            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+
+        <!-- 3. Admin Portal -->
+        <a href="http://localhost:5173/login/admin" class="block p-6 bg-white rounded-2xl border-2 border-[#e4e2de] hover:border-[#1f2a44] hover:shadow-lg transition-all group">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#fdde65]/50 text-[#746100] border border-[#fdde65]/60">Admin Portal</span>
+            <span class="text-xs font-mono text-[#76777d]">/login/admin</span>
+          </div>
+          <h3 class="text-xl font-['Newsreader',serif] font-medium text-[#09152e] group-hover:text-blue-900">Governance & Registrar Portal</h3>
+          <p class="text-xs text-[#45464d] mt-2 leading-relaxed">
+            Cryptographic ledger audits, 2FA clearance, department syllabus blueprints, and institutional user rosters.
+          </p>
+          <div class="mt-6 pt-4 border-t border-[#efeeea] flex items-center justify-between text-xs text-blue-900 font-semibold">
+            <span>Open Admin Login</span>
+            <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Central Landing Gateway Link -->
+    <div class="p-6 bg-white rounded-2xl border border-[#e4e2de] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+      <div>
+        <h4 class="font-['Newsreader',serif] text-lg font-medium text-[#09152e]">Main Landing Gateway (`/`)</h4>
+        <p class="text-xs text-[#76777d] mt-0.5">The institutional welcome portal displaying all 3 portals with one-click demo presets.</p>
+      </div>
+      <a href="http://localhost:5173/" class="px-5 py-2.5 bg-[#09152e] text-white rounded-xl text-xs font-semibold hover:bg-[#1f2a44] transition-all shrink-0">
+        Visit Landing Page (http://localhost:5173/)
+      </a>
+    </div>
+
+    <!-- Static Prototype Archive -->
+    <div class="pt-6 border-t border-[#e4e2de]">
+      <div class="mb-4">
+        <h3 class="text-lg font-['Newsreader',serif] font-medium text-[#09152e]">Static Stitch Prototype Backups</h3>
+        <p class="text-xs text-[#76777d]">Original raw HTML prototypes saved in the workspace:</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+        <a href="prototypes/01-teacher-review.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">01. Teacher Review</a>
+        <a href="prototypes/02-create-rubric.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">02. Create Rubric</a>
+        <a href="prototypes/03-login.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">03. Static Login</a>
+        <a href="prototypes/04-student-exam.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">04. Student Exam</a>
+        <a href="prototypes/05-teacher-dashboard.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">05. Teacher Dashboard</a>
+        <a href="prototypes/06-submission-status.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">06. Submission Status</a>
+        <a href="prototypes/07-student-result.html" class="p-3 bg-white rounded-xl border border-[#e4e2de] hover:border-black font-medium">07. Student Result</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

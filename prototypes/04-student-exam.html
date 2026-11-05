@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EvalAI Notebook - Basic Electrical Engineering Mid-Term</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#ffe16d",
+            "tertiary-fixed": "#fcdfab",
+            "tertiary-container": "#382804",
+            "on-surface-variant": "#45464d",
+            "surface-container-highest": "#e4e2de",
+            "on-tertiary-fixed": "#261900",
+            "tertiary": "#1f1400",
+            "surface-container-low": "#f5f3ef",
+            "inverse-on-surface": "#f2f0ed",
+            "on-primary-fixed": "#0f1b34",
+            "secondary-fixed-dim": "#e2c54f",
+            "primary-container": "#1f2a44",
+            "primary-fixed": "#d9e2ff",
+            "surface": "#fbf9f5",
+            "inverse-primary": "#bbc6e7",
+            "secondary-container": "#fdde65",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eae8e4",
+            "tertiary-fixed-dim": "#dfc391",
+            "on-background": "#1b1c1a",
+            "on-primary-fixed-variant": "#3b4662",
+            "on-error-container": "#93000a",
+            "surface-tint": "#535e7b",
+            "outline-variant": "#c6c6ce",
+            "surface-dim": "#dbdad6",
+            "background": "#fbf9f5",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#57441d",
+            "surface-container": "#efeeea",
+            "secondary": "#705d00",
+            "on-tertiary-container": "#a78f61",
+            "on-primary": "#ffffff",
+            "primary-fixed-dim": "#bbc6e7",
+            "surface-bright": "#fbf9f5",
+            "on-secondary-container": "#746100",
+            "surface-variant": "#e4e2de",
+            "on-secondary-fixed": "#221b00",
+            "on-secondary-fixed-variant": "#544600",
+            "inverse-surface": "#30312e",
+            "on-primary-container": "#8691b0",
+            "on-surface": "#1b1c1a",
+            "primary": "#09152e",
+            "outline": "#76777e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "margin": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Newsreader", "serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Newsreader", "serif"],
+            "display-lg-mobile": ["Newsreader", "serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "display-lg": ["Newsreader", "serif"],
+            "tabular-score": ["Inter", "sans-serif"],
+            "headline-sm": ["Newsreader", "serif"],
+            "label-md": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.005em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "500" }],
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "tabular-score": ["15px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased transition-colors duration-200 min-h-screen flex flex-col">
+<!-- Shared TopNavBar Component -->
+<header class="docked full-width top sticky top-0 z-20 bg-surface border-b border-outline-variant">
+<div class="max-w-[1600px] mx-auto flex justify-between items-center w-full px-6 py-3">
+<!-- Left: Exam Title & Question Context -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="auto_stories">auto_stories</span>
+<span class="font-headline-md text-headline-md text-primary tracking-tight">EvalAI Notebook</span>
+</div>
+<span class="text-outline-variant font-body-sm">|</span>
+<div class="flex items-center gap-2">
+<h1 class="font-label-md text-label-md text-on-surface">Basic Electrical Engineering • Mid-Term 2024</h1>
+<span class="bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-lg border border-outline-variant">Question 2 of 5</span>
+</div>
+</div>
+<!-- Right: Badges, Actions, and Theme Toggle -->
+<div class="flex items-center gap-4">
+<!-- Total Marks Badge -->
+<div class="flex items-center gap-1.5 bg-secondary-fixed text-tertiary px-2.5 py-1 rounded border border-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="grade">grade</span>
+<span class="font-tabular-score text-tabular-score font-bold">10 Marks</span>
+</div>
+<!-- Remaining Time Badge -->
+<div class="flex items-center gap-1.5 bg-surface-container-high px-3 py-1 rounded border border-outline-variant text-on-surface">
+<span class="material-symbols-outlined text-error text-base animate-pulse" data-icon="timer">timer</span>
+<span class="font-tabular-score text-tabular-score">42 mins remaining</span>
+</div>
+<div class="h-5 w-px bg-outline-variant"></div>
+<!-- Theme Toggle Button -->
+<button class="flex items-center justify-center p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors duration-150 rounded" id="themeToggleBtn" title="Toggle Theme">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<!-- Folio Version Tag -->
+<span class="hidden md:inline font-label-sm text-label-sm text-on-surface-variant">Marking Folio v2.4</span>
+</div>
+</div>
+</header>
+<!-- Main Workspace / Split Folio Layout -->
+<main class="flex-1 max-w-[1600px] w-full mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Left Column: Question Panel (5 cols) -->
+<section class="lg:col-span-5 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col p-6 sticky top-20">
+<!-- Panel Header & Navigator -->
+<div class="flex items-center justify-between border-b border-outline-variant pb-4 mb-5">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant">Section B • Core Theory</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Paper Code: EE-201</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1 hover:bg-surface-container rounded text-on-surface-variant transition-colors" title="Previous Question">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+</button>
+<span class="font-label-sm text-label-sm font-semibold px-1">Q2</span>
+<button class="p-1 hover:bg-surface-container rounded text-on-surface-variant transition-colors" title="Next Question">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Question Prompt Statement -->
+<div class="space-y-4">
+<div class="flex items-start gap-2">
+<span class="font-headline-sm text-headline-sm text-primary">2.</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-snug">
+            Explain the working principle of a single-phase transformer with core flux relationships and derive the standard EMF equation. Include step-by-step turns ratio logic.
+          </h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Ensure mathematical completeness. Clearly define all instantaneous notations ($\phi$, $e_1$, $e_2$) and distinguish between maximum and RMS potentials across both winding coils.
+        </p>
+</div>
+<!-- Requirements Ruled Breakdown Card -->
+<div class="mt-6 border border-outline-variant bg-surface-container-low rounded-lg p-4">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-primary text-base" data-icon="checklist">checklist</span>
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-wide">Evaluation Rubric &amp; Breakdown</h3>
+</div>
+<ul class="space-y-2.5">
+<li class="flex items-start gap-2.5 font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<div>
+<span class="font-medium text-on-surface">Principle of Electromagnetic Induction</span>
+<p class="text-on-surface-variant font-label-sm">Detail Faraday's Law &amp; Lenz's Law governing mutual induction.</p>
+</div>
+</li>
+<li class="flex items-start gap-2.5 font-body-sm text-body-sm text-on-surface border-t border-outline-variant pt-2.5">
+<span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5" data-icon="schema">schema</span>
+<div>
+<span class="font-medium text-on-surface">Core Flux Linkage &amp; Waveform</span>
+<p class="text-on-surface-variant font-label-sm">Illustrate or annotate sinusoidal flux variation: $\Phi(t) = \Phi_m \sin(\omega t)$.</p>
+</div>
+</li>
+<li class="flex items-start gap-2.5 font-body-sm text-body-sm text-on-surface border-t border-outline-variant pt-2.5">
+<span class="material-symbols-outlined text-primary text-base shrink-0 mt-0.5" data-icon="functions">functions</span>
+<div>
+<span class="font-medium text-on-surface">EMF Equations Derivation ($E_1$ &amp; $E_2$)</span>
+<p class="text-on-surface-variant font-label-sm">Derive $E_{rms} = 4.44 \cdot f \cdot N \cdot \Phi_m$ and state the transformation ratio $K = N_2/N_1$.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Instructor Guidance Note -->
+<div class="mt-6 p-3 bg-surface-container rounded border-l-2 border-primary text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-primary" data-icon="info">info</span>
+<span class="font-body-sm text-body-sm">Examiners grant partial credit for clear turns-ratio derivations and hand-drawn flux diagrams.</span>
+</div>
+</section>
+<!-- Right Column: Answer Input Area (7 cols) -->
+<section class="lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col p-6 space-y-6">
+<!-- Input Mode Switcher Tabs -->
+<div class="flex items-center justify-between border-b border-outline-variant pb-2">
+<div class="flex items-center gap-4">
+<!-- Inactive Tab: Type Answer -->
+<button class="flex items-center gap-2 pb-2 text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="edit_note">edit_note</span>
+<span>Type answer</span>
+</button>
+<!-- Active Tab: Upload handwritten answer -->
+<button class="flex items-center gap-2 pb-2 text-primary border-b-2 border-primary font-label-md text-label-md font-semibold transition-colors" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="draw">draw</span>
+<span>Upload handwritten answer</span>
+</button>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Active Workspace</span>
+</div>
+<!-- Upload Container Block -->
+<div class="space-y-4">
+<!-- 1. Dashed Drop Area -->
+<div class="border-2 border-dashed border-outline-variant hover:border-primary bg-surface-container-low transition-colors duration-150 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface font-medium">
+            Drag and drop your scanned handwritten pages or photos here
+          </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            or <span class="text-primary underline font-medium">browse local files</span>
+</p>
+<div class="mt-3 inline-block font-label-sm text-label-sm text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded">
+            JPG, PNG, PDF (up to 15MB)
+          </div>
+</div>
+<!-- 2. Uploaded File Preview Card -->
+<div class="border border-outline-variant bg-surface rounded-lg p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-surface-container-high rounded border border-outline-variant text-primary">
+<span class="material-symbols-outlined text-xl" data-icon="image">image</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-semibold">page_01_transformer_answer.jpg (2.4 MB)</p>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Processed by OCR</span>
+</div>
+</div>
+</div>
+<!-- Action buttons -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded" title="View Full Scan">
+<span class="material-symbols-outlined text-base" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-surface-container rounded" title="Remove File">
+<span class="material-symbols-outlined text-base" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Progress Bar at 100% -->
+<div class="w-full bg-surface-container-high rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full w-full"></div>
+</div>
+</div>
+<!-- 3. OCR Output Review / Editable Area -->
+<div class="border border-outline-variant rounded-lg p-4 bg-surface flex flex-col space-y-3">
+<div class="flex items-center justify-between border-b border-outline-variant pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base" data-icon="document_scanner">document_scanner</span>
+<label class="font-label-md text-label-md text-primary font-semibold" for="ocrTranscriptionArea">
+                Text we read from your page
+              </label>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">Editable OCR Layer</span>
+</div>
+<!-- Instructional note -->
+<div class="bg-surface-container-low border border-outline-variant p-2.5 rounded flex items-start gap-2">
+<span class="material-symbols-outlined text-sm text-primary shrink-0 mt-0.5" data-icon="edit_document">edit_document</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Fix any OCR transcription mistakes before submitting. Academic evaluators read both your scan and this text.
+            </p>
+</div>
+<!-- Textarea containing OCR Text -->
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-0 rounded p-3 font-body-sm text-body-sm text-on-surface leading-relaxed resize-y" id="ocrTranscriptionArea" rows="9">1. PRINCIPLE:
+A single-phase transformer operates on Faraday's Law of Mutual Electromagnetic Induction. When alternating voltage V1 is supplied to the primary winding with N1 turns, an alternating flux Phi is established in the laminated silicon-steel magnetic core.
+
+2. CORE FLUX RELATIONSHIP:
+Let Phi(t) = Phi_max * sin(omega * t), where omega = 2 * pi * f.
+This flux links both primary and secondary windings without conductive contact.
+
+3. EMF EQUATION DERIVATION:
+By Faraday's law of induction, induced EMF at any instant is:
+e1 = -N1 * (dPhi / dt)
+e1 = -N1 * d/dt [Phi_max * sin(omega * t)]
+e1 = -N1 * omega * Phi_max * cos(omega * t)
+e1 = N1 * omega * Phi_max * sin(omega * t - 90 deg)
+
+Maximum instantaneous EMF:
+E_max1 = N1 * omega * Phi_max = 2 * pi * f * N1 * Phi_max
+
+RMS value of induced EMF:
+E1 = E_max1 / sqrt(2) = (2 * pi / sqrt(2)) * f * N1 * Phi_max
+E1 = 4.44 * f * N1 * Phi_max (Volts)
+
+Similarly, for the secondary winding:
+E2 = 4.44 * f * N2 * Phi_max (Volts)
+
+4. TURNS RATIO:
+Dividing E2 by E1 gives:
+E2 / E1 = N2 / N1 = K (Transformation Ratio)</textarea>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm pt-1">
+<span>Character count: 914 • Word count: 148</span>
+<span class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-xs" data-icon="done_all">done_all</span> Auto-saved 1 min ago
+            </span>
+</div>
+</div>
+</div>
+<!-- Bottom Action Bar -->
+<div class="pt-4 border-t border-outline-variant flex items-center justify-between gap-4">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant text-on-surface hover:bg-surface-container-low transition-colors duration-150 rounded font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-base" data-icon="bookmark_border">bookmark_border</span>
+<span>Save draft</span>
+</button>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" type="button">
+            Clear Response
+          </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-primary text-surface font-label-md text-label-md rounded font-semibold transition-colors duration-150" id="openSubmitModalBtn" type="button">
+<span>Submit answer</span>
+<span class="material-symbols-outlined text-base" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Confirmation Modal Dialog Preview -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[1px] p-4 transition-opacity" id="submitConfirmationModal">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl max-w-lg w-full p-6 shadow-sm flex flex-col space-y-4">
+<!-- Modal Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Submit Question 2?</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Question 2 of 5 • 10 Marks Allocated</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded" id="closeModalCross">
+<span class="material-symbols-outlined text-base" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Body Content -->
+<div class="border-y border-outline-variant py-4 space-y-3">
+<p class="font-body-md text-body-md text-on-surface leading-normal">
+          Are you sure you want to submit Question 2? You can still review other questions before final exam hand-in.
+        </p>
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant space-y-1.5 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="attach_file">attach_file</span>
+<span>1 file attached: <strong class="font-medium">page_01_transformer_answer.jpg</strong></span>
+</div>
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="spellcheck">spellcheck</span>
+<span>Transcribed text verified and ready for evaluator comparison.</span>
+</div>
+</div>
+</div>
+<!-- Modal Action Buttons -->
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="px-4 py-2 border border-outline-variant rounded font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors" id="cancelModalBtn" type="button">
+          Cancel
+        </button>
+<button class="px-5 py-2 bg-primary text-surface font-label-md text-label-md font-semibold rounded hover:bg-primary-container transition-colors" id="confirmModalBtn" type="button">
+          Confirm Submission
+        </button>
+</div>
+</div>
+</div>
+<!-- Interactive Logic for Modal & Dark Mode Toggle -->
+<script>
+    // Theme toggle handling
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Modal display handling
+    const modal = document.getElementById('submitConfirmationModal');
+    const openBtn = document.getElementById('openSubmitModalBtn');
+    const closeCross = document.getElementById('closeModalCross');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+    const confirmBtn = document.getElementById('confirmModalBtn');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
+
+    const closeModal = () => {
+      modal.classList.add('hidden');
+    };
+
+    closeCross.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    confirmBtn.addEventListener('click', () => {
+      alert('Question 2 answer has been successfully recorded to your exam docket.');
+      closeModal();
+    });
+
+    // Clicking outside modal content to close
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  </script>
+</body></html>

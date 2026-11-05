@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Submission Status &amp; Verification — EvalAI Notebook</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed": "#ffe16d",
+            "tertiary-fixed": "#fcdfab",
+            "tertiary-container": "#382804",
+            "on-surface-variant": "#45464d",
+            "surface-container-highest": "#e4e2de",
+            "on-tertiary-fixed": "#261900",
+            "tertiary": "#1f1400",
+            "surface-container-low": "#f5f3ef",
+            "inverse-on-surface": "#f2f0ed",
+            "on-primary-fixed": "#0f1b34",
+            "secondary-fixed-dim": "#e2c54f",
+            "primary-container": "#1f2a44",
+            "primary-fixed": "#d9e2ff",
+            "surface": "#fbf9f5",
+            "inverse-primary": "#bbc6e7",
+            "secondary-container": "#fdde65",
+            "error": "#ba1a1a",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eae8e4",
+            "tertiary-fixed-dim": "#dfc391",
+            "on-background": "#1b1c1a",
+            "on-primary-fixed-variant": "#3b4662",
+            "on-error-container": "#93000a",
+            "surface-tint": "#535e7b",
+            "outline-variant": "#c6c6ce",
+            "surface-dim": "#dbdad6",
+            "background": "#fbf9f5",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#57441d",
+            "surface-container": "#efeeea",
+            "secondary": "#705d00",
+            "on-tertiary-container": "#a78f61",
+            "on-primary": "#ffffff",
+            "primary-fixed-dim": "#bbc6e7",
+            "surface-bright": "#fbf9f5",
+            "on-secondary-container": "#746100",
+            "surface-variant": "#e4e2de",
+            "on-secondary-fixed": "#221b00",
+            "on-secondary-fixed-variant": "#544600",
+            "inverse-surface": "#30312e",
+            "on-primary-container": "#8691b0",
+            "on-surface": "#1b1c1a",
+            "primary": "#09152e",
+            "outline": "#76777e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "margin": "2.5rem",
+            "space-xs": "0.25rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Newsreader", "serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-md": ["Newsreader", "serif"],
+            "display-lg-mobile": ["Newsreader", "serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "display-lg": ["Newsreader", "serif"],
+            "tabular-score": ["Inter", "monospace"],
+            "headline-sm": ["Newsreader", "serif"],
+            "label-md": ["Inter", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.005em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "500" }],
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "tabular-score": ["15px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill-active {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Subtle ruled line academic motif */
+    .ruled-bg {
+      background-image: linear-gradient(to bottom, transparent 96%, rgba(198, 198, 206, 0.25) 96%);
+      background-size: 100% 28px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Top Examination Bar -->
+<header class="w-full bg-surface-container-lowest dark:bg-primary-container border-b border-outline-variant/60 sticky top-0 z-20">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+<!-- Exam Context & Candidate Identification -->
+<div class="flex items-center gap-4">
+<div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center border border-outline-variant/50 text-primary">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary tracking-tight">
+              Basic Electrical Engineering • Mid-Term 2024
+            </h1>
+<span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-lg bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/40">
+              Folio Session Q2
+            </span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="font-medium text-on-surface">Candidate ID:</span>
+<span>Aarav Sharma (EE-2024-042)</span>
+<span class="text-outline-variant">•</span>
+<span class="font-tabular-score text-label-sm text-primary dark:text-inverse-primary">Question 2 of 5</span>
+</div>
+</div>
+</div>
+<!-- Action & Light/Dark Switcher -->
+<div class="flex items-center gap-3 ml-auto">
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-container-low rounded-lg border border-outline-variant/40 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span>Syncing Ledger</span>
+</div>
+<button aria-label="Toggle theme" class="p-2 text-on-surface-variant hover:text-on-surface rounded-xl hover:bg-surface-container transition-colors duration-150 border border-transparent hover:border-outline-variant/40" id="themeToggle">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col items-center justify-center">
+<!-- Secondary Navigation Anchor -->
+<div class="w-full flex items-center justify-between mb-4 px-1">
+<a class="inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary dark:hover:text-inverse-primary font-label-md text-label-md transition-colors duration-150 group" href="#back">
+<span class="material-symbols-outlined transition-transform duration-150 group-hover:-translate-x-0.5" data-icon="arrow_back">arrow_back</span>
+<span>Back to my exams</span>
+</a>
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Exam Docket #EE-9481</span>
+</div>
+<!-- Notebook-Inspired Status Folio Card -->
+<div class="w-full bg-surface-container-lowest dark:bg-primary-container/90 border border-outline-variant/80 rounded-xl overflow-hidden shadow-[0_2px_4px_rgba(30,36,51,0.04)]">
+<!-- Folio Header with Ruled Binder Accent -->
+<div class="px-6 sm:px-8 pt-7 pb-6 border-b border-outline-variant/60 relative bg-surface-container-low/40">
+<!-- Notebook perforated / ledger top line visual indicator -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary dark:bg-inverse-primary"></div>
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary dark:text-secondary-fixed font-semibold">Evaluation Pipeline</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Archival Record</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary dark:text-inverse-primary tracking-tight">
+              Submission Status &amp; Verification
+            </h2>
+</div>
+<div class="inline-flex items-center gap-2 self-start sm:self-center px-3 py-1.5 rounded-lg bg-surface border border-outline-variant text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-outline" data-icon="schedule">schedule</span>
+<span>Recorded 10:14 AM</span>
+</div>
+</div>
+</div>
+<!-- Timeline Canvas -->
+<div class="px-6 sm:px-10 py-8 ruled-bg">
+<div class="relative">
+<!-- Continuous Timeline Track Line -->
+<div class="absolute left-4 sm:left-5 top-5 bottom-6 w-[2px] bg-outline-variant/40 -translate-x-1/2"></div>
+<!-- Step List -->
+<div class="space-y-7 relative">
+<!-- Step 1: Submitted (Completed) -->
+<div class="flex items-start gap-4 sm:gap-6 group">
+<!-- Marker Icon -->
+<div class="relative z-10 w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-[#2E7D4F]/10 border border-[#2E7D4F]/30 flex items-center justify-center shrink-0 text-[#2E7D4F] transition-transform duration-150">
+<span class="material-symbols-outlined fill-active" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Content -->
+<div class="flex-1 pt-0.5">
+<div class="flex flex-wrap items-baseline justify-between gap-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">Submitted</h3>
+<span class="px-2 py-0.5 rounded-lg bg-[#2E7D4F]/10 text-[#2E7D4F] border border-[#2E7D4F]/20 font-label-sm text-label-sm">
+                      Completed
+                    </span>
+</div>
+<span class="font-tabular-score text-label-sm text-on-surface-variant bg-surface px-2 py-0.5 rounded border border-outline-variant/40">10:14 AM</span>
+</div>
+<p class="mt-1 text-on-surface-variant font-body-sm text-body-sm">
+                  Files and OCR text safely uploaded.
+                </p>
+</div>
+</div>
+<!-- Step 2: Reading your handwriting (Completed) -->
+<div class="flex items-start gap-4 sm:gap-6 group">
+<!-- Marker Icon -->
+<div class="relative z-10 w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-[#2E7D4F]/10 border border-[#2E7D4F]/30 flex items-center justify-center shrink-0 text-[#2E7D4F] transition-transform duration-150">
+<span class="material-symbols-outlined fill-active" data-icon="check_circle">check_circle</span>
+</div>
+<!-- Content -->
+<div class="flex-1 pt-0.5">
+<div class="flex flex-wrap items-baseline justify-between gap-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">Reading your handwriting</h3>
+<span class="px-2 py-0.5 rounded-lg bg-[#2E7D4F]/10 text-[#2E7D4F] border border-[#2E7D4F]/20 font-label-sm text-label-sm">
+                      Completed
+                    </span>
+</div>
+<span class="font-tabular-score text-label-sm text-on-surface-variant bg-surface px-2 py-0.5 rounded border border-outline-variant/40">10:15 AM</span>
+</div>
+<p class="mt-1 text-on-surface-variant font-body-sm text-body-sm">
+                  Scanned folio transcribed with 98.4% optical confidence.
+                </p>
+</div>
+</div>
+<!-- Step 3: Being evaluated (In Progress) -->
+<div class="flex items-start gap-4 sm:gap-6 group">
+<!-- Marker Icon: Amber Pulse Indicator -->
+<div class="relative z-10 w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-secondary-fixed/50 border border-secondary/40 flex items-center justify-center shrink-0 text-secondary transition-transform duration-150">
+<span class="absolute w-full h-full rounded-xl bg-secondary-fixed animate-ping opacity-40"></span>
+<span class="material-symbols-outlined relative" data-icon="psychology">psychology</span>
+</div>
+<!-- Content -->
+<div class="flex-1 pt-0.5 bg-surface-container-low/50 p-3.5 rounded-xl border border-secondary/30">
+<div class="flex flex-wrap items-baseline justify-between gap-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-primary dark:text-inverse-primary">Being evaluated</h3>
+<span class="px-2 py-0.5 rounded-lg bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm border border-secondary/30 font-semibold">
+                      In Progress
+                    </span>
+</div>
+<span class="font-tabular-score text-label-sm text-secondary font-medium bg-surface px-2 py-0.5 rounded border border-secondary/20 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                    In progress
+                  </span>
+</div>
+<p class="mt-1 text-on-surface font-body-sm text-body-sm">
+                  AI analyzing Faraday's law concepts against teacher rubric.
+                </p>
+</div>
+</div>
+<!-- Step 4: Teacher review (Upcoming) -->
+<div class="flex items-start gap-4 sm:gap-6 opacity-75">
+<!-- Marker Icon: Grey Pending Indicator -->
+<div class="relative z-10 w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-surface-container border border-outline-variant flex items-center justify-center shrink-0 text-outline">
+<span class="material-symbols-outlined" data-icon="person_search">person_search</span>
+</div>
+<!-- Content -->
+<div class="flex-1 pt-0.5">
+<div class="flex flex-wrap items-baseline justify-between gap-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant">Teacher review</h3>
+<span class="px-2 py-0.5 rounded-lg bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/40">
+                      Upcoming
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-outline italic">Pending step 3</span>
+</div>
+<p class="mt-1 text-on-surface-variant font-body-sm text-body-sm">
+                  Assigned to Prof. Harrington for definitive grading.
+                </p>
+</div>
+</div>
+<!-- Step 5: Result published (Upcoming) -->
+<div class="flex items-start gap-4 sm:gap-6 opacity-60">
+<!-- Marker Icon: Grey Pending Indicator -->
+<div class="relative z-10 w-8 sm:w-10 h-8 sm:h-10 rounded-xl bg-surface-container border border-outline-variant flex items-center justify-center shrink-0 text-outline">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+</div>
+<!-- Content -->
+<div class="flex-1 pt-0.5">
+<div class="flex flex-wrap items-baseline justify-between gap-2">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant">Result published</h3>
+<span class="px-2 py-0.5 rounded-lg bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/40">
+                      Upcoming
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-outline italic">Final phase</span>
+</div>
+<p class="mt-1 text-on-surface-variant font-body-sm text-body-sm">
+                  Final official mark published to student ledger.
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Reassuring Editorial Callout -->
+<div class="mt-10 p-4 rounded-xl bg-surface-container-low border border-outline-variant/60 flex items-start gap-3">
+<div class="p-1 rounded bg-surface border border-outline-variant/40 text-primary dark:text-inverse-primary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="info">info</span>
+</div>
+<p class="text-on-surface font-body-md text-body-md leading-relaxed">
+<strong class="font-semibold text-primary dark:text-inverse-primary">What happens next:</strong> Your instructor reviews the preliminary concepts before any score is finalized. No action is required from you.
+          </p>
+</div>
+</div>
+<!-- Folio Footer / Secondary Actions -->
+<div class="px-6 sm:px-8 py-4 bg-surface-container-low/60 border-t border-outline-variant/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified">verified</span>
+<span>Encrypted cryptographic checksum valid</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<a class="px-4 py-2 rounded-xl text-on-surface border border-outline-variant hover:bg-surface transition-colors duration-150 font-label-md text-label-md text-center" href="#back">
+            Back to my exams
+          </a>
+<button class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary text-surface hover:bg-primary-container transition-colors duration-150 font-label-md text-label-md shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span>
+<span>View submitted file copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Student Support & Academic Assurance Footer Note -->
+<div class="mt-6 text-center text-on-surface-variant font-body-sm text-body-sm">
+<p>Questions regarding evaluation timeline? Consult the <a class="underline decoration-outline-variant hover:text-primary dark:hover:text-inverse-primary" href="#rubric">Department Rubric Guidelines</a> or notify the exam coordinator.</p>
+</div>
+</main>
+<script>
+    // Theme toggle interaction
+    const toggleBtn = document.getElementById('themeToggle');
+    const htmlElem = document.documentElement;
+
+    toggleBtn.addEventListener('click', () => {
+      if (htmlElem.classList.contains('dark')) {
+        htmlElem.classList.remove('dark');
+        htmlElem.classList.add('light');
+      } else {
+        htmlElem.classList.remove('light');
+        htmlElem.classList.add('dark');
+      }
+    });
+  </script>
+</body></html>
