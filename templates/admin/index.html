@@ -1,0 +1,308 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('EvalAI Administration') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col gap-6">
+
+    <!-- KPI Summary Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Users Card -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-font-subtle-light dark:text-font-subtle-dark">Registered Users</span>
+                <span class="material-symbols-outlined text-primary-600 dark:text-primary-400">group</span>
+            </div>
+            <div class="text-3xl font-bold text-font-important-light dark:text-font-important-dark mb-2">
+                {{ kpi.total_users|default:"0" }}
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-medium">
+                    {{ kpi.total_teachers|default:"0" }} Teachers
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 font-medium">
+                    {{ kpi.total_students|default:"0" }} Students
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-medium">
+                    {{ kpi.active_users|default:"0" }} Active
+                </span>
+                {% if kpi.inactive_users %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300 font-medium">
+                    {{ kpi.inactive_users }} Inactive
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Questions Card -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-font-subtle-light dark:text-font-subtle-dark">Total Questions</span>
+                <span class="material-symbols-outlined text-primary-600 dark:text-primary-400">quiz</span>
+            </div>
+            <div class="text-3xl font-bold text-font-important-light dark:text-font-important-dark mb-2">
+                {{ kpi.total_questions|default:"0" }}
+            </div>
+            <div class="text-xs text-font-subtle-light dark:text-font-subtle-dark">
+                Descriptive rubric-backed questions
+            </div>
+        </div>
+
+        <!-- Submissions Card -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-font-subtle-light dark:text-font-subtle-dark">Total Submissions</span>
+                <span class="material-symbols-outlined text-primary-600 dark:text-primary-400">assignment</span>
+            </div>
+            <div class="text-3xl font-bold text-font-important-light dark:text-font-important-dark mb-2">
+                {{ kpi.total_submissions|default:"0" }}
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 font-medium">
+                    {{ kpi.pending_evaluations|default:"0" }} Pending
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-medium">
+                    {{ kpi.completed_evaluations|default:"0" }} Evaluated
+                </span>
+            </div>
+        </div>
+
+        <!-- AI Evaluations & Teacher Review Card -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default p-5 shadow-xs flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-font-subtle-light dark:text-font-subtle-dark">Teacher Reviews</span>
+                <span class="material-symbols-outlined text-primary-600 dark:text-primary-400">rate_review</span>
+            </div>
+            <div class="text-3xl font-bold text-font-important-light dark:text-font-important-dark mb-2">
+                {{ kpi.pending_teacher_reviews|default:"0" }}
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 font-medium">
+                    {{ kpi.approved_evaluations|default:"0" }} Approved
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 font-medium">
+                    {{ kpi.modified_evaluations|default:"0" }} Modified
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Section Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Recent Submissions -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default overflow-hidden shadow-xs">
+            <div class="border-b border-base-200 dark:border-base-800 px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 font-semibold text-sm text-font-important-light dark:text-font-important-dark">
+                    <span class="material-symbols-outlined text-base text-primary-600">history_edu</span>
+                    Recent Student Submissions
+                </div>
+                <a href="{% url 'admin:submissions_submission_changelist' %}" class="text-xs font-medium text-primary-600 hover:text-primary-700">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-base-50 dark:bg-base-800/50 text-font-subtle-light dark:text-font-subtle-dark uppercase">
+                        <tr>
+                            <th class="px-5 py-2.5 font-semibold">Student</th>
+                            <th class="px-5 py-2.5 font-semibold">Question</th>
+                            <th class="px-5 py-2.5 font-semibold">Status</th>
+                            <th class="px-5 py-2.5 font-semibold">Submitted</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for sub in recent_submissions %}
+                        <tr class="hover:bg-base-50/50 dark:hover:bg-base-800/30">
+                            <td class="px-5 py-3 font-medium text-font-important-light dark:text-font-important-dark">
+                                {{ sub.student.username }}
+                            </td>
+                            <td class="px-5 py-3 text-font-default-light dark:text-font-default-dark truncate max-w-[180px]">
+                                {{ sub.question.title }}
+                            </td>
+                            <td class="px-5 py-3">
+                                {% if sub.status == 'SUBMITTED' %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">SUBMITTED</span>
+                                {% elif sub.status == 'EVALUATED' %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">EVALUATED</span>
+                                {% else %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">REVIEWED</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-5 py-3 text-font-subtle-light dark:text-font-subtle-dark">
+                                {{ sub.submitted_at|date:"M d, H:i" }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-5 py-6 text-center text-font-subtle-light dark:text-font-subtle-dark italic">
+                                No student submissions recorded yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Evaluations Awaiting Teacher Review -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default overflow-hidden shadow-xs">
+            <div class="border-b border-base-200 dark:border-base-800 px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 font-semibold text-sm text-font-important-light dark:text-font-important-dark">
+                    <span class="material-symbols-outlined text-base text-amber-600">pending_actions</span>
+                    Evaluations Awaiting Teacher Approval
+                </div>
+                <a href="{% url 'admin:evaluations_evaluation_changelist' %}?teacher_review_status__exact=PENDING" class="text-xs font-medium text-amber-600 hover:text-amber-700">Review Queue</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-base-50 dark:bg-base-800/50 text-font-subtle-light dark:text-font-subtle-dark uppercase">
+                        <tr>
+                            <th class="px-5 py-2.5 font-semibold">Student</th>
+                            <th class="px-5 py-2.5 font-semibold">Suggested Marks</th>
+                            <th class="px-5 py-2.5 font-semibold">Confidence</th>
+                            <th class="px-5 py-2.5 font-semibold">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for ev in evaluations_awaiting_approval %}
+                        <tr class="hover:bg-base-50/50 dark:hover:bg-base-800/30">
+                            <td class="px-5 py-3 font-medium text-font-important-light dark:text-font-important-dark">
+                                {{ ev.submission.student.username }}
+                            </td>
+                            <td class="px-5 py-3 font-semibold text-primary-600">
+                                {{ ev.suggested_marks }} / {{ ev.max_marks }}
+                            </td>
+                            <td class="px-5 py-3 text-font-default-light dark:text-font-default-dark">
+                                {{ ev.confidence|floatformat:2 }}
+                            </td>
+                            <td class="px-5 py-3">
+                                <a href="{% url 'admin:evaluations_evaluation_change' ev.id %}" class="inline-flex items-center px-2 py-1 rounded text-[11px] font-medium bg-primary-50 text-primary-700 hover:bg-primary-100 dark:bg-primary-900/30 dark:text-primary-300">
+                                    Review
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-5 py-6 text-center text-font-subtle-light dark:text-font-subtle-dark italic">
+                                All AI evaluations have been reviewed.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Questions -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default overflow-hidden shadow-xs">
+            <div class="border-b border-base-200 dark:border-base-800 px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 font-semibold text-sm text-font-important-light dark:text-font-important-dark">
+                    <span class="material-symbols-outlined text-base text-primary-600">help</span>
+                    Recently Created Questions
+                </div>
+                <a href="{% url 'admin:questions_question_changelist' %}" class="text-xs font-medium text-primary-600 hover:text-primary-700">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-base-50 dark:bg-base-800/50 text-font-subtle-light dark:text-font-subtle-dark uppercase">
+                        <tr>
+                            <th class="px-5 py-2.5 font-semibold">Title</th>
+                            <th class="px-5 py-2.5 font-semibold">Subject</th>
+                            <th class="px-5 py-2.5 font-semibold">Teacher</th>
+                            <th class="px-5 py-2.5 font-semibold">Max Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for q in recent_questions %}
+                        <tr class="hover:bg-base-50/50 dark:hover:bg-base-800/30">
+                            <td class="px-5 py-3 font-medium text-font-important-light dark:text-font-important-dark truncate max-w-[180px]">
+                                {{ q.title }}
+                            </td>
+                            <td class="px-5 py-3 text-font-default-light dark:text-font-default-dark">
+                                {{ q.subject }}
+                            </td>
+                            <td class="px-5 py-3 text-font-subtle-light dark:text-font-subtle-dark">
+                                {{ q.teacher.username }}
+                            </td>
+                            <td class="px-5 py-3 font-semibold text-font-important-light dark:text-font-important-dark">
+                                {{ q.max_marks }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-5 py-6 text-center text-font-subtle-light dark:text-font-subtle-dark italic">
+                                No questions created yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recently Evaluated Answers -->
+        <div class="bg-white dark:bg-base-900 border border-base-200 dark:border-base-800 rounded-default overflow-hidden shadow-xs">
+            <div class="border-b border-base-200 dark:border-base-800 px-5 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-2 font-semibold text-sm text-font-important-light dark:text-font-important-dark">
+                    <span class="material-symbols-outlined text-base text-primary-600">psychology</span>
+                    Recently Evaluated Answers
+                </div>
+                <a href="{% url 'admin:evaluations_evaluation_changelist' %}" class="text-xs font-medium text-primary-600 hover:text-primary-700">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-base-50 dark:bg-base-800/50 text-font-subtle-light dark:text-font-subtle-dark uppercase">
+                        <tr>
+                            <th class="px-5 py-2.5 font-semibold">Student</th>
+                            <th class="px-5 py-2.5 font-semibold">Score</th>
+                            <th class="px-5 py-2.5 font-semibold">Review Status</th>
+                            <th class="px-5 py-2.5 font-semibold">Evaluated At</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-200 dark:divide-base-800">
+                        {% for ev in recently_evaluated %}
+                        <tr class="hover:bg-base-50/50 dark:hover:bg-base-800/30">
+                            <td class="px-5 py-3 font-medium text-font-important-light dark:text-font-important-dark">
+                                {{ ev.submission.student.username }}
+                            </td>
+                            <td class="px-5 py-3 font-semibold text-primary-600">
+                                {{ ev.final_marks }} / {{ ev.max_marks }}
+                            </td>
+                            <td class="px-5 py-3">
+                                {% if ev.teacher_review_status == 'APPROVED' %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">APPROVED</span>
+                                {% elif ev.teacher_review_status == 'MODIFIED' %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">MODIFIED</span>
+                                {% else %}
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">PENDING</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-5 py-3 text-font-subtle-light dark:text-font-subtle-dark">
+                                {{ ev.evaluated_at|date:"M d, H:i" }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-5 py-6 text-center text-font-subtle-light dark:text-font-subtle-dark italic">
+                                No evaluations performed yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Default Unfold App List and History -->
+    <div class="mt-4">
+        {% include "unfold/helpers/dashboard_default.html" %}
+    </div>
+
+</div>
+{% endblock %}
