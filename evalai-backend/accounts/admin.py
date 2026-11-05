@@ -96,3 +96,36 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     )
     def role_badge(self, obj: User) -> str:
         return obj.role
+
+    def get_fieldsets(self, request, obj=None):
+        """Only superusers may view or assign the superuser flag."""
+        fieldsets = super().get_fieldsets(request, obj)
+        if request.user.is_superuser:
+            return fieldsets
+
+        restricted = []
+        for title, options in fieldsets:
+            fields = tuple(
+                field
+                for field in options.get("fields", ())
+                if field != "is_superuser"
+            )
+            options = {**options, "fields": fields}
+            restricted.append((title, options))
+        return restricted
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj and not request.user.is_superuser:
+            return (*super().get_readonly_fields(request, obj), "is_superuser")
+        return super().get_readonly_fields(request, obj)
+
+    def save_model(self, request, obj, form, change):
+        # Do not permit a staff user with change-user permission to privilege
+        # escalate via a crafted admin POST.
+        if change and not request.user.is_superuser:
+            obj.is_superuser = User.objects.only("is_superuser").get(
+                pk=obj.pk
+            ).is_superuser
+        elif not change and not request.user.is_superuser:
+            obj.is_superuser = False
+        super().save_model(request, obj, form, change)

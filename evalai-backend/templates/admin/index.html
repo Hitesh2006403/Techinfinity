@@ -28,6 +28,14 @@
                 <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 font-medium">
                     {{ kpi.total_students|default:"0" }} Students
                 </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-medium">
+                    {{ kpi.active_users|default:"0" }} Active
+                </span>
+                {% if kpi.inactive_users %}
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300 font-medium">
+                    {{ kpi.inactive_users }} Inactive
+                </span>
+                {% endif %}
             </div>
         </div>
 

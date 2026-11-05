@@ -23,9 +23,8 @@ class QuestionListCreateView(APIView):
         if getattr(user, "role", None) == "TEACHER" and not (
             user.is_staff or user.is_superuser
         ):
-            show_all = request.query_params.get("all", "false").lower() == "true"
-            if not show_all:
-                queryset = queryset.filter(teacher=user)
+            # Questions authored by another teacher are private to that teacher.
+            queryset = queryset.filter(teacher=user)
         elif getattr(user, "role", None) == "STUDENT":
             # Students only see active questions open for submissions
             queryset = queryset.filter(is_active=True)

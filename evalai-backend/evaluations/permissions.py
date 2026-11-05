@@ -5,7 +5,6 @@ class CanEvaluateSubmission(permissions.BasePermission):
     """
     Checks if user is authorized to trigger evaluation:
     - Teacher who owns the question
-    - Student who submitted the answer
     - Staff / superuser
     """
 
@@ -18,9 +17,6 @@ class CanEvaluateSubmission(permissions.BasePermission):
             return True
 
         if obj.question.teacher == user:
-            return True
-
-        if obj.student == user:
             return True
 
         return False

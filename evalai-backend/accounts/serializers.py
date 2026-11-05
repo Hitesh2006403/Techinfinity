@@ -17,13 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "email",
+            "role",
             "first_name",
             "last_name",
-            "role",
-            "date_joined",
-            "is_staff",
         ]
-        read_only_fields = ["id", "date_joined", "is_staff"]
+        read_only_fields = fields
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -37,9 +35,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validators=[validate_password],
         style={"input_type": "password"},
     )
-    password_confirm = serializers.CharField(
+    confirm_password = serializers.CharField(
         write_only=True,
-        required=False,
+        required=True,
         style={"input_type": "password"},
     )
 
@@ -50,10 +48,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "username",
             "email",
             "password",
-            "password_confirm",
+            "confirm_password",
             "first_name",
             "last_name",
-            "role",
         ]
         extra_kwargs = {
             "email": {"required": True},
@@ -69,25 +66,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             )
         return normalized_email
 
-    def validate_role(self, value):
-        valid_roles = [User.Role.TEACHER, User.Role.STUDENT]
-        if value not in valid_roles:
-            raise serializers.ValidationError(
-                f"Invalid role '{value}'. Must be either 'TEACHER' or 'STUDENT'."
-            )
-        return value
-
     def validate(self, attrs):
-        if "password_confirm" in attrs:
-            if attrs["password"] != attrs["password_confirm"]:
-                raise serializers.ValidationError(
-                    {"password_confirm": "Password confirmation does not match."}
-                )
+        if attrs["password"] != attrs["confirm_password"]:
+            raise serializers.ValidationError(
+                {"confirm_password": "Password confirmation does not match."}
+            )
         return attrs
 
     def create(self, validated_data):
-        validated_data.pop("password_confirm", None)
+        validated_data.pop("confirm_password")
         password = validated_data.pop("password")
+        role = self.context.get("role")
+        if role not in (User.Role.TEACHER, User.Role.STUDENT):
+            raise serializers.ValidationError("A registration role is required.")
+        # The view, rather than request data, is the sole authority for roles and
+        # elevated account flags on public registration.
+        validated_data.update(
+            role=role,
+            is_staff=False,
+            is_superuser=False,
+        )
         user = User(**validated_data)
         user.set_password(password)
         user.save()
@@ -99,32 +97,28 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     """
     Validates user credentials and provides token upon successful login.
-    Supports login with either username or email.
+    Uses email and password; usernames are never used as an authentication
+    identifier by this public endpoint.
     """
 
-    username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(
         required=True, write_only=True, style={"input_type": "password"}
     )
 
     def validate(self, attrs):
-        login_input = attrs.get("username", "").strip()
+        email = attrs["email"].strip().lower()
         password = attrs.get("password")
 
-        # Check if the login input is an email address
-        user = None
-        if "@" in login_input:
-            try:
-                user_obj = User.objects.get(email__iexact=login_input)
-                user = authenticate(username=user_obj.username, password=password)
-            except User.DoesNotExist:
-                user = None
-        else:
-            user = authenticate(username=login_input, password=password)
+        try:
+            user_obj = User.objects.get(email__iexact=email)
+            user = authenticate(username=user_obj.username, password=password)
+        except User.DoesNotExist:
+            user = None
 
         if not user:
             raise serializers.ValidationError(
-                "Invalid login credentials. Please verify your username/email and password."
+                "Invalid email or password."
             )
 
         if not user.is_active:

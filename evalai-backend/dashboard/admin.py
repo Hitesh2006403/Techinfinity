@@ -16,6 +16,8 @@ def dashboard_callback(request, context: dict) -> dict:
     total_users = User.objects.count()
     total_teachers = User.objects.filter(role=User.Role.TEACHER).count()
     total_students = User.objects.filter(role=User.Role.STUDENT).count()
+    active_users = User.objects.filter(is_active=True).count()
+    inactive_users = User.objects.filter(is_active=False).count()
 
     # Academic & Submission counts
     total_questions = Question.objects.count()
@@ -61,6 +63,8 @@ def dashboard_callback(request, context: dict) -> dict:
                 "total_users": total_users,
                 "total_teachers": total_teachers,
                 "total_students": total_students,
+                "active_users": active_users,
+                "inactive_users": inactive_users,
                 "total_questions": total_questions,
                 "total_submissions": total_submissions,
                 "pending_evaluations": pending_evaluations,

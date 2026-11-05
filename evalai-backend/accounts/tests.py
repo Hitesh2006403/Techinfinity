@@ -1,124 +1,151 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
-from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
 
 class AccountsAuthTests(APITestCase):
     def setUp(self):
-        self.register_url = reverse("accounts:register")
+        self.teacher_register_url = reverse("accounts:register-teacher")
+        self.student_register_url = reverse("accounts:register-student")
         self.login_url = reverse("accounts:login")
         self.me_url = reverse("accounts:current-user")
+        self.logout_url = reverse("accounts:logout")
 
-    def test_student_registration(self):
-        """Test registering a new student account."""
+    def registration_payload(self, **overrides):
         data = {
             "username": "newstudent",
             "email": "newstudent@evalai.com",
             "password": "Password123!",
-            "password_confirm": "Password123!",
+            "confirm_password": "Password123!",
             "first_name": "New",
             "last_name": "Student",
-            "role": "STUDENT",
         }
-        response = self.client.post(self.register_url, data)
+        data.update(overrides)
+        return data
+
+    def test_student_registration_forces_student_non_staff_role(self):
+        response = self.client.post(
+            self.student_register_url,
+            self.registration_payload(role="TEACHER", is_staff=True, is_superuser=True),
+            format="json",
+        )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(response.data["success"])
+        user = User.objects.get(username="newstudent")
+        self.assertEqual(user.role, User.Role.STUDENT)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+        self.assertTrue(user.check_password("Password123!"))
+        self.assertNotEqual(user.password, "Password123!")
         self.assertIn("token", response.data["data"])
-        self.assertEqual(response.data["data"]["user"]["role"], "STUDENT")
-        self.assertTrue(User.objects.filter(username="newstudent").exists())
 
-    def test_teacher_registration(self):
-        """Test registering a new teacher account."""
-        data = {
-            "username": "newteacher",
-            "email": "newteacher@evalai.com",
-            "password": "Password123!",
-            "password_confirm": "Password123!",
-            "first_name": "New",
-            "last_name": "Teacher",
-            "role": "TEACHER",
-        }
-        response = self.client.post(self.register_url, data)
+    def test_teacher_registration_forces_teacher_role(self):
+        response = self.client.post(
+            self.teacher_register_url,
+            self.registration_payload(
+                username="newteacher",
+                email="newteacher@evalai.com",
+                role="STUDENT",
+            ),
+            format="json",
+        )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(response.data["success"])
-        self.assertEqual(response.data["data"]["user"]["role"], "TEACHER")
+        user = User.objects.get(username="newteacher")
+        self.assertEqual(user.role, User.Role.TEACHER)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
 
-    def test_duplicate_email_registration_fails(self):
-        """Test that registering with duplicate email is rejected."""
+    def test_registration_rejects_duplicate_email_and_mismatched_password(self):
         User.objects.create_user(
             username="existinguser",
             email="duplicate@evalai.com",
             password="Password123!",
-            role="STUDENT",
+            role=User.Role.STUDENT,
         )
-        data = {
-            "username": "anotheruser",
-            "email": "duplicate@evalai.com",
-            "password": "Password123!",
-            "role": "STUDENT",
-        }
-        response = self.client.post(self.register_url, data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertFalse(response.data["success"])
+        duplicate = self.client.post(
+            self.student_register_url,
+            self.registration_payload(email="duplicate@evalai.com"),
+            format="json",
+        )
+        mismatch = self.client.post(
+            self.student_register_url,
+            self.registration_payload(
+                username="differentuser",
+                email="different@evalai.com",
+                confirm_password="DifferentPassword123!",
+            ),
+            format="json",
+        )
 
-    def test_login_with_username_and_email(self):
-        """Test authentication via username and email."""
+        self.assertEqual(duplicate.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", duplicate.data["errors"])
+        self.assertEqual(mismatch.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("confirm_password", mismatch.data["errors"])
+
+    def test_login_uses_email_and_returns_no_sensitive_user_fields(self):
         user = User.objects.create_user(
             username="testuser",
             email="testuser@evalai.com",
-            password="SecretPassword123",
-            role="TEACHER",
+            password="SecretPassword123!",
+            role=User.Role.TEACHER,
         )
 
-        # Login with username
-        resp_username = self.client.post(
-            self.login_url,
-            {"username": "testuser", "password": "SecretPassword123"},
-        )
-        self.assertEqual(resp_username.status_code, status.HTTP_200_OK)
-        self.assertTrue(resp_username.data["success"])
-        self.assertIn("token", resp_username.data["data"])
-
-        # Login with email
-        resp_email = self.client.post(
-            self.login_url,
-            {"username": "testuser@evalai.com", "password": "SecretPassword123"},
-        )
-        self.assertEqual(resp_email.status_code, status.HTTP_200_OK)
-        self.assertTrue(resp_email.data["success"])
-
-    def test_login_invalid_password(self):
-        """Test login fails with incorrect password."""
-        User.objects.create_user(
-            username="wrongpassuser",
-            email="wrong@evalai.com",
-            password="CorrectPassword123",
-            role="STUDENT",
-        )
         response = self.client.post(
             self.login_url,
-            {"username": "wrongpassuser", "password": "BadPassword"},
+            {"email": "TESTUSER@evalai.com", "password": "SecretPassword123!"},
+            format="json",
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertFalse(response.data["success"])
 
-    def test_current_user_profile(self):
-        """Test /api/auth/me/ returns authenticated user's profile."""
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["data"]["user"]["id"], user.id)
+        self.assertNotIn("password", response.data["data"]["user"])
+        self.assertNotIn("is_staff", response.data["data"]["user"])
+        self.assertTrue(Token.objects.filter(user=user).exists())
+
+    def test_login_rejects_invalid_or_inactive_accounts(self):
+        user = User.objects.create_user(
+            username="inactiveuser",
+            email="inactive@evalai.com",
+            password="SecretPassword123!",
+            role=User.Role.STUDENT,
+            is_active=False,
+        )
+        inactive = self.client.post(
+            self.login_url,
+            {"email": user.email, "password": "SecretPassword123!"},
+            format="json",
+        )
+        invalid = self.client.post(
+            self.login_url,
+            {"email": user.email, "password": "wrong"},
+            format="json",
+        )
+
+        self.assertEqual(inactive.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(invalid.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_me_requires_authentication_and_logout_invalidates_token(self):
         user = User.objects.create_user(
             username="meuser",
             email="me@evalai.com",
             password="Password123!",
-            role="STUDENT",
+            role=User.Role.STUDENT,
         )
-        # Unauthenticated request
-        unauth_resp = self.client.get(self.me_url)
-        self.assertEqual(unauth_resp.status_code, status.HTTP_401_UNAUTHORIZED)
+        token = Token.objects.create(user=user)
 
-        # Authenticated request
-        self.client.force_authenticate(user=user)
-        auth_resp = self.client.get(self.me_url)
-        self.assertEqual(auth_resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(auth_resp.data["data"]["user"]["username"], "meuser")
+        self.assertEqual(self.client.get(self.me_url).status_code, status.HTTP_401_UNAUTHORIZED)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+        profile = self.client.get(self.me_url)
+        logout = self.client.post(self.logout_url)
+
+        self.assertEqual(profile.status_code, status.HTTP_200_OK)
+        self.assertEqual(profile.data["data"]["username"], "meuser")
+        self.assertEqual(logout.status_code, status.HTTP_200_OK)
+        self.assertFalse(Token.objects.filter(user=user).exists())
+        self.assertEqual(self.client.get(self.me_url).status_code, status.HTTP_401_UNAUTHORIZED)

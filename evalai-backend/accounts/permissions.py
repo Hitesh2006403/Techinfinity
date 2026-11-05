@@ -31,7 +31,7 @@ class IsStudent(permissions.BasePermission):
         )
 
 
-class IsStaffOrAdmin(permissions.BasePermission):
+class IsAdminUser(permissions.BasePermission):
     """
     Allows access only to Django staff or superusers.
     """
@@ -44,3 +44,25 @@ class IsStaffOrAdmin(permissions.BasePermission):
             and request.user.is_authenticated
             and (request.user.is_staff or request.user.is_superuser)
         )
+
+
+class IsTeacherOrAdmin(permissions.BasePermission):
+    """Allows teachers and Django staff/superusers, never regular students."""
+
+    message = "Teacher or administrator credentials are required."
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(
+            user
+            and user.is_authenticated
+            and (
+                getattr(user, "role", None) == "TEACHER"
+                or user.is_staff
+                or user.is_superuser
+            )
+        )
+
+
+# Backwards-compatible name for existing internal imports.
+IsStaffOrAdmin = IsAdminUser

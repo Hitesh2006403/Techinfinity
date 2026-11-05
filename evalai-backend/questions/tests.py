@@ -112,3 +112,17 @@ class QuestionAPITests(APITestCase):
         patch_data = {"title": "Malicious Title Change"}
         response = self.client.patch(self.detail_url, patch_data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_teacher_cannot_list_another_teachers_questions(self):
+        """A teacher's collection is private, even when ?all=true is supplied."""
+        self.client.force_authenticate(user=self.teacher2)
+        response = self.client.get(f"{self.list_create_url}?all=true")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["data"]["count"], 0)
+
+    def test_teacher_cannot_read_another_teachers_question(self):
+        self.client.force_authenticate(user=self.teacher2)
+        response = self.client.get(self.detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

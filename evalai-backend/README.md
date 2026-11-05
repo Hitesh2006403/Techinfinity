@@ -260,26 +260,31 @@ Include the header `Authorization: Token <your_token>` on all authenticated requ
 
 | Method | Endpoint | Description | Auth Required |
 |---|---|---|---|
-| `POST` | `/api/auth/register/` | Register new user (`TEACHER` or `STUDENT`) | No |
-| `POST` | `/api/auth/login/` | Log in with username/email & password | No |
+| `POST` | `/api/auth/register/teacher/` | Register a non-staff teacher account | No |
+| `POST` | `/api/auth/register/student/` | Register a non-staff student account | No |
+| `POST` | `/api/auth/login/` | Log in with email & password | No |
 | `GET` | `/api/auth/me/` | Fetch current user profile & role | Yes |
+| `POST` | `/api/auth/logout/` | Invalidate the current authentication token | Yes |
 
-#### Register Request Body:
+#### Teacher or Student Registration Request Body:
 ```json
 {
     "username": "john_doe",
     "email": "john@example.com",
     "password": "SecurePassword123!",
+    "confirm_password": "SecurePassword123!",
     "first_name": "John",
-    "last_name": "Doe",
-    "role": "STUDENT"
+    "last_name": "Doe"
 }
 ```
+
+The registration URL determines the role. Public payloads cannot assign roles,
+staff access, or superuser access.
 
 #### Login Request Body:
 ```json
 {
-    "username": "john_doe",
+    "email": "john@example.com",
     "password": "SecurePassword123!"
 }
 ```
@@ -290,7 +295,7 @@ Include the header `Authorization: Token <your_token>` on all authenticated requ
 
 | Method | Endpoint | Description | Permitted Roles |
 |---|---|---|---|
-| `GET` | `/api/questions/` | List questions (Supports `?subject=` and `?all=true`) | Authenticated |
+| `GET` | `/api/questions/` | List questions (supports `?subject=`; teachers see only their own) | Authenticated |
 | `POST` | `/api/questions/` | Create a new question with rubric | `TEACHER` |
 | `GET` | `/api/questions/<id>/` | Question details (Redacts reference answer for students) | Authenticated |
 | `PUT` | `/api/questions/<id>/` | Replace question details | Question Owner (`TEACHER`) |
@@ -319,7 +324,7 @@ Include the header `Authorization: Token <your_token>` on all authenticated requ
 | `POST` | `/api/submissions/` | Submit answer to a question | `STUDENT` |
 | `GET` | `/api/submissions/` | List submissions (Student sees theirs; Teacher sees questions they own) | Authenticated |
 | `GET` | `/api/submissions/<id>/` | Submission details | Student Owner or Teacher |
-| `POST` | `/api/submissions/<id>/evaluate/` | Trigger Gemini AI evaluation | Student Owner or Teacher |
+| `POST` | `/api/submissions/<id>/evaluate/` | Trigger Gemini AI evaluation | Question Owner (`TEACHER`) or staff |
 | `GET` | `/api/submissions/<id>/evaluation/` | View evaluation for submission | Student Owner or Teacher |
 
 #### Submit Answer Request Body:

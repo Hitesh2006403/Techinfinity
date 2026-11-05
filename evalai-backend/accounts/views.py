@@ -7,25 +7,28 @@ from .serializers import (
     UserLoginSerializer,
     UserSerializer,
 )
+from .models import User
 
 
 class RegisterView(APIView):
     """
-    POST /api/auth/register/
-    Registers a new student or teacher account and returns an auth token.
+    Base view for role-specific public registration endpoints.
     """
 
     permission_classes = [permissions.AllowAny]
+    role = None
 
     def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
+        serializer = UserRegistrationSerializer(
+            data=request.data, context={"role": self.role}
+        )
         if serializer.is_valid():
             user = serializer.save()
             token = Token.objects.get(user=user)
             user_data = UserSerializer(user).data
             return api_response(
                 success=True,
-                message=f"User registered successfully as {user.role.capitalize()}.",
+                message=f"User registered successfully as {user.get_role_display()}.",
                 data={
                     "user": user_data,
                     "token": token.key,
@@ -40,10 +43,22 @@ class RegisterView(APIView):
         )
 
 
+class TeacherRegistrationView(RegisterView):
+    """POST /api/auth/register/teacher/ creates a non-staff teacher."""
+
+    role = User.Role.TEACHER
+
+
+class StudentRegistrationView(RegisterView):
+    """POST /api/auth/register/student/ creates a non-staff student."""
+
+    role = User.Role.STUDENT
+
+
 class LoginView(APIView):
     """
     POST /api/auth/login/
-    Authenticates a user via username/email and password, returning their token and profile.
+    Authenticates a user via email and password, returning their token and profile.
     """
 
     permission_classes = [permissions.AllowAny]
@@ -56,7 +71,7 @@ class LoginView(APIView):
             user_data = UserSerializer(user).data
             return api_response(
                 success=True,
-                message="Login successful.",
+                message="Login successful",
                 data={
                     "user": user_data,
                     "token": token,
@@ -84,6 +99,21 @@ class CurrentUserView(APIView):
         return api_response(
             success=True,
             message="User profile retrieved successfully.",
-            data={"user": serializer.data},
+            data=serializer.data,
+            status_code=status.HTTP_200_OK,
+        )
+
+
+class LogoutView(APIView):
+    """POST /api/auth/logout/ invalidates the token used by the user."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        Token.objects.filter(user=request.user).delete()
+        return api_response(
+            success=True,
+            message="Logout successful.",
+            data=None,
             status_code=status.HTTP_200_OK,
         )

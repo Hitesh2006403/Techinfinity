@@ -112,6 +112,13 @@ class EvaluationAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["data"]["evaluation"]["id"], evaluation.id)
 
+    def test_student_cannot_trigger_ai_evaluation(self):
+        """Students submit answers but cannot spend evaluation service capacity."""
+        self.client.force_authenticate(user=self.student1)
+        response = self.client.post(self.evaluate_url)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_teacher_approves_evaluation(self):
         """Test teacher approving AI suggested marks."""
         evaluation = Evaluation.objects.create(
