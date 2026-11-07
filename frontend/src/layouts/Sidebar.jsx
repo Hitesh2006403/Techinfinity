@@ -25,7 +25,7 @@ export function Sidebar({ isOpen, onClose }) {
     { to: "/teacher/exams", label: "Exams", icon: FileText },
     { to: "/teacher/review", label: "Marking & Reviews", icon: FileCheck2, badge: "3" },
     { to: "/teacher/analytics", label: "Results & Analytics", icon: BarChart3 },
-    { to: "/teacher/manage", label: "Courses & Classes", icon: Layers },
+    { to: "/teacher/manage", label: "Subjects & RAG", icon: Layers },
     { to: "/assistant", label: "Learning Assistant", icon: Sparkles },
     { to: "/admin/users", label: "Users / Admin", icon: Users },
   ];
@@ -41,7 +41,7 @@ export function Sidebar({ isOpen, onClose }) {
   const adminNav = [
     { to: "/admin/dashboard", label: "Platform Overview", icon: LayoutDashboard },
     { to: "/admin/users", label: "User Management", icon: Users },
-    { to: "/teacher/manage", label: "Courses & Classes", icon: Layers },
+    { to: "/teacher/manage", label: "Subjects & RAG", icon: Layers },
     { to: "/teacher/analytics", label: "System Analytics", icon: BarChart3 },
   ];
 
@@ -81,12 +81,12 @@ export function Sidebar({ isOpen, onClose }) {
             {/* Quick Action Button for Teacher */}
             {role === "teacher" && (
               <NavLink
-                to="/teacher/create-exam"
+                to="/teacher/manage"
                 onClick={onClose}
                 className="w-full mb-6 flex items-center justify-center gap-2 py-2 px-3 bg-primary dark:bg-primary-fixed text-white dark:text-primary rounded-xl text-sm font-semibold hover:bg-primary-hover transition-colors shadow-xs"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>New Evaluation</span>
+                <span>New Subject</span>
               </NavLink>
             )}
 

@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
+from unittest.mock import patch
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
+from accounts.management.commands.setup_demo_data import set_bootstrap_password
 
 
 User = get_user_model()
@@ -149,3 +151,25 @@ class AccountsAuthTests(APITestCase):
         self.assertEqual(logout.status_code, status.HTTP_200_OK)
         self.assertFalse(Token.objects.filter(user=user).exists())
         self.assertEqual(self.client.get(self.me_url).status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_bootstrap_accounts_have_no_shared_default_password(self):
+        user = User.objects.create_user(
+            username="bootstrapuser",
+            email="bootstrap@evalai.com",
+            password=None,
+            role=User.Role.TEACHER,
+        )
+        with patch.dict("os.environ", {"EVALAI_TEST_BOOTSTRAP_PASSWORD": ""}):
+            set_bootstrap_password(user, "EVALAI_TEST_BOOTSTRAP_PASSWORD")
+        self.assertFalse(user.has_usable_password())
+
+    def test_bootstrap_password_is_only_set_when_explicitly_supplied(self):
+        user = User.objects.create_user(
+            username="configuredbootstrap",
+            email="configured-bootstrap@evalai.com",
+            password=None,
+            role=User.Role.TEACHER,
+        )
+        with patch.dict("os.environ", {"EVALAI_TEST_BOOTSTRAP_PASSWORD": "Temporary-Test-Password-123!"}):
+            set_bootstrap_password(user, "EVALAI_TEST_BOOTSTRAP_PASSWORD")
+        self.assertTrue(user.check_password("Temporary-Test-Password-123!"))

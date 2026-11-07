@@ -108,11 +108,11 @@ export function TeacherDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <Link
-            to="/teacher/create-exam"
+            to="/teacher/manage"
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-xs hover:shadow-md transition-all"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Create New Exam</span>
+            <span>Create Subject Pipeline</span>
           </Link>
         </div>
       </div>

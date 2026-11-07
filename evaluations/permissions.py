@@ -16,7 +16,7 @@ class CanEvaluateSubmission(permissions.BasePermission):
         if user.is_staff or user.is_superuser:
             return True
 
-        if obj.question.teacher == user:
+        if obj.question.teacher == user or (obj.subject and obj.subject.teacher == user):
             return True
 
         return False
@@ -39,9 +39,13 @@ class CanViewEvaluation(permissions.BasePermission):
             return True
 
         if obj.submission.student == user:
+            # The serializer returns only the "Awaiting teacher review" state
+            # until publication; this lets the student page show progress.
             return True
 
-        if obj.submission.question.teacher == user:
+        if obj.submission.question.teacher == user or (
+            getattr(obj.submission, "subject", None) and obj.submission.subject.teacher == user
+        ):
             return True
 
         return False
@@ -64,5 +68,8 @@ class IsTeacherOwnerForReview(permissions.BasePermission):
 
         return (
             getattr(user, "role", None) == "TEACHER"
-            and obj.submission.question.teacher == user
+            and (
+                obj.submission.question.teacher == user
+                or (obj.submission.subject and obj.submission.subject.teacher == user)
+            )
         )

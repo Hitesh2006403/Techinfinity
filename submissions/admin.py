@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.decorators import display
-from .models import Submission
+from .models import Submission, UploadedAnswerSheet
 
 
 @admin.register(Submission)
@@ -72,3 +72,11 @@ class SubmissionAdmin(ModelAdmin):
             final = obj.evaluation.final_marks
             return f"{final} / {obj.evaluation.max_marks}"
         return "Not Evaluated"
+
+
+@admin.register(UploadedAnswerSheet)
+class UploadedAnswerSheetAdmin(ModelAdmin):
+    list_display = ("document_type", "subject", "student", "teacher", "uploaded_at")
+    list_filter = ("document_type", "uploaded_at")
+    search_fields = ("subject__name", "student__username", "teacher__username", "document")
+    readonly_fields = ("uploaded_at",)

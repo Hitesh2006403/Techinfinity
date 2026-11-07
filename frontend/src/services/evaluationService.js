@@ -2,6 +2,10 @@ import api from "./api";
 import { MOCK_SUBMISSIONS, MOCK_CLASS_PERFORMANCE, MOCK_STUDENT_RESULTS } from "../utils/mockData";
 
 export const evaluationService = {
+  async getStudentResults() {
+    const response = await api.get("/submissions/");
+    return response.data?.data?.submissions || [];
+  },
   async getEvaluationReport(submissionId) {
     try {
       const response = await api.get(`/evaluations/${submissionId}/`);

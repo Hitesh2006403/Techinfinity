@@ -24,30 +24,36 @@ class TeacherDashboardView(APIView):
     def get(self, request):
         teacher = request.user
 
-        # Teacher's questions
+        # Teacher's questions & subjects
         teacher_questions = Question.objects.filter(teacher=teacher)
         total_questions = teacher_questions.count()
         active_questions = teacher_questions.filter(is_active=True).count()
 
-        # Submissions for teacher's questions
+        # Submissions for teacher's questions or subjects
         teacher_submissions = Submission.objects.filter(
-            question__teacher=teacher
-        ).select_related("student", "question")
+            Q(question__teacher=teacher) | Q(subject__teacher=teacher)
+        ).select_related("student", "question", "subject").distinct()
         total_submissions = teacher_submissions.count()
         pending_evaluations = teacher_submissions.filter(
-            status=Submission.Status.SUBMITTED
+            status__in=[
+                Submission.Status.UPLOADED,
+                Submission.Status.PROCESSING,
+                Submission.Status.AI_EVALUATED,
+                Submission.Status.PENDING_TEACHER_REVIEW,
+                Submission.Status.FAILED,
+            ]
         ).count()
         evaluated_submissions = teacher_submissions.filter(
-            status=Submission.Status.EVALUATED
+            status__in=[Submission.Status.AI_EVALUATED, Submission.Status.PENDING_TEACHER_REVIEW]
         ).count()
         reviewed_submissions = teacher_submissions.filter(
-            status=Submission.Status.REVIEWED
+            status__in=[Submission.Status.APPROVED, Submission.Status.PUBLISHED]
         ).count()
 
-        # Evaluations for teacher's questions
+        # Evaluations for teacher's questions or subjects
         teacher_evaluations = Evaluation.objects.filter(
-            submission__question__teacher=teacher
-        ).select_related("submission__student", "submission__question")
+            Q(submission__question__teacher=teacher) | Q(submission__subject__teacher=teacher)
+        ).select_related("submission__student", "submission__question", "submission__subject").distinct()
         total_evaluations = teacher_evaluations.count()
         pending_reviews = teacher_evaluations.filter(
             teacher_review_status=Evaluation.ReviewStatus.PENDING
@@ -63,8 +69,8 @@ class TeacherDashboardView(APIView):
         recent_submissions_data = [
             {
                 "id": sub.id,
-                "question_id": sub.question.id,
-                "question_title": sub.question.title,
+                "question_id": sub.question.id if sub.question else None,
+                "question_title": sub.question.title if sub.question else (sub.subject.name if sub.subject else "Submission"),
                 "student_username": sub.student.username,
                 "student_name": sub.student.get_full_name() or sub.student.username,
                 "status": sub.status,
@@ -78,7 +84,7 @@ class TeacherDashboardView(APIView):
             {
                 "id": ev.id,
                 "submission_id": ev.submission.id,
-                "question_title": ev.submission.question.title,
+                "question_title": ev.submission.question.title if ev.submission.question else (ev.submission.subject.name if ev.submission.subject else "Evaluation"),
                 "student_username": ev.submission.student.username,
                 "suggested_marks": ev.suggested_marks,
                 "max_marks": ev.max_marks,
@@ -130,22 +136,28 @@ class StudentDashboardView(APIView):
 
         student_submissions = (
             Submission.objects.filter(student=student)
-            .select_related("question", "question__teacher")
+            .select_related("question", "question__teacher", "subject")
             .prefetch_related("evaluation")
         )
         total_submissions = student_submissions.count()
         submitted_count = student_submissions.filter(
-            status=Submission.Status.SUBMITTED
+            status__in=[Submission.Status.UPLOADED, Submission.Status.PROCESSING, Submission.Status.FAILED]
         ).count()
         evaluated_count = student_submissions.filter(
-            status=Submission.Status.EVALUATED
+            status__in=[
+                Submission.Status.AI_EVALUATED,
+                Submission.Status.PENDING_TEACHER_REVIEW,
+                Submission.Status.APPROVED,
+                Submission.Status.PUBLISHED,
+            ]
         ).count()
-        reviewed_count = student_submissions.filter(
-            status=Submission.Status.REVIEWED
-        ).count()
+        reviewed_count = student_submissions.filter(status=Submission.Status.PUBLISHED).count()
 
-        # Score calculations
-        student_evaluations = Evaluation.objects.filter(submission__student=student)
+        # Score calculations: ONLY published evaluations
+        student_evaluations = Evaluation.objects.filter(
+            submission__student=student,
+            published_at__isnull=False,
+        )
         score_percentages = []
         for ev in student_evaluations:
             final_mark = (
@@ -169,7 +181,7 @@ class StudentDashboardView(APIView):
             if (
                 hasattr(sub, "evaluation")
                 and sub.evaluation is not None
-                and sub.evaluation.teacher_review_status != Evaluation.ReviewStatus.PENDING
+                and sub.evaluation.published_at is not None
             ):
                 ev = sub.evaluation
                 eval_data = {
@@ -185,9 +197,9 @@ class StudentDashboardView(APIView):
             recent_submissions_data.append(
                 {
                     "submission_id": sub.id,
-                    "question_id": sub.question.id,
-                    "question_title": sub.question.title,
-                    "subject": sub.question.subject,
+                    "question_id": sub.question.id if sub.question else None,
+                    "question_title": sub.question.title if sub.question else (sub.subject.name if sub.subject else "Submission"),
+                    "subject": (sub.question.subject if (sub.question and sub.question.subject) else (sub.subject.name if sub.subject else "")),
                     "submitted_at": sub.submitted_at,
                     "status": sub.status,
                     "evaluation": eval_data,
@@ -218,8 +230,8 @@ class TeacherAnalyticsView(APIView):
 
     def get(self, request):
         evaluations = Evaluation.objects.filter(
-            submission__question__teacher=request.user
-        ).select_related("submission__question")
+            Q(submission__question__teacher=request.user) | Q(submission__subject__teacher=request.user)
+        ).select_related("submission__question", "submission__subject").distinct()
         scored = []
         for evaluation in evaluations:
             mark = evaluation.teacher_approved_marks

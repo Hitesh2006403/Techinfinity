@@ -58,12 +58,46 @@ export const examService = {
   },
 
   async getSubjects() {
-    try {
-      const response = await api.get("/subjects/");
-      return response.data;
-    } catch {
-      return MOCK_SUBJECTS;
-    }
+    const response = await api.get("/questions/subjects/");
+    return response.data?.data?.resources || [];
+  },
+
+  async createSubject({ name, notesDescription, referenceNotes, evaluationScheme }) {
+    const form = new FormData();
+    form.append("name", name);
+    form.append("notes_description", notesDescription || "");
+    if (referenceNotes) form.append("reference_notes", referenceNotes);
+    if (evaluationScheme) form.append("evaluation_scheme", evaluationScheme);
+    const response = await api.post("/questions/subjects/", form, { headers: { "Content-Type": "multipart/form-data" } });
+    return response.data?.data?.resource;
+  },
+
+  async getPipeline(subjectId) {
+    const response = await api.get(`/questions/subjects/${subjectId}/pipeline/`);
+    return response.data?.data || { reference_documents: [], question_papers: [] };
+  },
+
+  async updateExtractedQuestion(questionId, data) {
+    const response = await api.patch(`/questions/extracted-questions/${questionId}/`, data);
+    return response.data?.data?.question;
+  },
+
+  async uploadQuestionPaper(subjectId, document) {
+    const form = new FormData();
+    form.append("document_type", "QUESTION_PAPER");
+    form.append("subject", subjectId);
+    form.append("document", document);
+    const response = await api.post("/submissions/answer-sheets/upload/", form, { headers: { "Content-Type": "multipart/form-data" } });
+    return response.data?.data?.upload;
+  },
+
+  async uploadStudentAnswer({ subjectId, studentId, document }) {
+    const form = new FormData();
+    form.append("subject_id", subjectId);
+    form.append("student_id", studentId);
+    form.append("document", document);
+    const response = await api.post("/submissions/answer-sheets/mapped-upload/", form, { headers: { "Content-Type": "multipart/form-data" } });
+    return response.data?.data;
   },
 
   async getClassrooms() {

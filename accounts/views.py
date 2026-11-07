@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework import permissions, status
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.authtoken.models import Token
 from config.responses import api_response
 from .serializers import (
@@ -67,6 +68,8 @@ class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
     # Login must also work independently of any existing admin session.
     authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
 
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)

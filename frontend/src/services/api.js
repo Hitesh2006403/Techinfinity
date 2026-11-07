@@ -12,12 +12,12 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to attach JWT auth tokens
+// Request interceptor to attach Django token-auth credentials.
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("eduinfinity_token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Token ${token}`;
     }
     return config;
   },

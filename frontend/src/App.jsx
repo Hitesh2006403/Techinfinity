@@ -26,6 +26,7 @@ import { AssignedExamsList } from "./pages/student/AssignedExamsList";
 import { StudentExamWorkspace } from "./pages/student/StudentExamWorkspace";
 import { SubmissionStatusPage } from "./pages/student/SubmissionStatusPage";
 import { StudentResultFolio } from "./pages/student/StudentResultFolio";
+import { StudentResultsLive } from "./pages/student/StudentResultsLive";
 import { LearningAssistantPage } from "./pages/student/LearningAssistantPage";
 
 // Admin Pages
@@ -66,7 +67,7 @@ export default function App() {
               <Route path="/student/exams" element={<AssignedExamsList />} />
               <Route path="/student/exam/:id" element={<StudentExamWorkspace />} />
               <Route path="/student/status" element={<SubmissionStatusPage />} />
-              <Route path="/student/results" element={<StudentResultFolio />} />
+              <Route path="/student/results" element={<StudentResultsLive />} />
 
               {/* Common Learning Assistant */}
               <Route path="/assistant" element={<LearningAssistantPage />} />

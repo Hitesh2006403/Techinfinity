@@ -1,4 +1,5 @@
 from decimal import Decimal
+import os
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
@@ -7,6 +8,14 @@ from submissions.models import Submission
 from evaluations.models import Evaluation
 
 User = get_user_model()
+
+
+def set_bootstrap_password(user, variable_name):
+    password = os.getenv(variable_name, "")
+    if password:
+        user.set_password(password)
+    else:
+        user.set_unusable_password()
 
 
 class Command(BaseCommand):
@@ -28,10 +37,10 @@ class Command(BaseCommand):
             },
         )
         if created:
-            admin_user.set_password("Admin@123456")
+            set_bootstrap_password(admin_user, "EVALAI_SETUP_ADMIN_PASSWORD")
             admin_user.save()
             Token.objects.get_or_create(user=admin_user)
-            self.stdout.write(self.style.SUCCESS("Superuser created: admin / Admin@123456"))
+            self.stdout.write(self.style.SUCCESS("Account created; configure its password securely before login."))
         else:
             self.stdout.write("Superuser 'admin' already exists.")
 
@@ -47,10 +56,10 @@ class Command(BaseCommand):
             },
         )
         if created:
-            teacher.set_password("Teacher@123456")
+            set_bootstrap_password(teacher, "EVALAI_SETUP_TEACHER_PASSWORD")
             teacher.save()
             Token.objects.get_or_create(user=teacher)
-            self.stdout.write(self.style.SUCCESS("Demo Teacher created: prof_sharma / Teacher@123456"))
+            self.stdout.write(self.style.SUCCESS("Account created; configure its password securely before login."))
 
         # 3. Demo Students
         student1, created = User.objects.get_or_create(
@@ -64,10 +73,10 @@ class Command(BaseCommand):
             },
         )
         if created:
-            student1.set_password("Student@123456")
+            set_bootstrap_password(student1, "EVALAI_SETUP_STUDENT1_PASSWORD")
             student1.save()
             Token.objects.get_or_create(user=student1)
-            self.stdout.write(self.style.SUCCESS("Demo Student 1 created: aravind_k / Student@123456"))
+            self.stdout.write(self.style.SUCCESS("Account created; configure its password securely before login."))
 
         student2, created = User.objects.get_or_create(
             username="priya_s",
@@ -80,10 +89,10 @@ class Command(BaseCommand):
             },
         )
         if created:
-            student2.set_password("Student@123456")
+            set_bootstrap_password(student2, "EVALAI_SETUP_STUDENT2_PASSWORD")
             student2.save()
             Token.objects.get_or_create(user=student2)
-            self.stdout.write(self.style.SUCCESS("Demo Student 2 created: priya_s / Student@123456"))
+            self.stdout.write(self.style.SUCCESS("Account created; configure its password securely before login."))
 
         # 4. Demo Question
         q1, created = Question.objects.get_or_create(

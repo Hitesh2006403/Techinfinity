@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from unfold.admin import ModelAdmin
 from unfold.decorators import display
-from .models import Evaluation
+from .models import Evaluation, QuestionEvaluation
 
 
 @admin.register(Evaluation)
@@ -14,6 +14,7 @@ class EvaluationAdmin(ModelAdmin):
         "teacher_approved_marks",
         "max_marks",
         "review_status_badge",
+        "report_link",
         "confidence_percentage",
         "evaluated_at",
     )
@@ -22,6 +23,7 @@ class EvaluationAdmin(ModelAdmin):
         "teacher_review_status",
         "evaluated_at",
         "reviewed_at",
+        "report_document",
     )
 
     search_fields = (
@@ -105,3 +107,7 @@ class EvaluationAdmin(ModelAdmin):
     @display(description=_("AI Confidence"))
     def confidence_percentage(self, obj: Evaluation) -> str:
         return f"{int(obj.confidence * 100)}%"
+
+    @display(description=_("Report"))
+    def report_link(self, obj: Evaluation) -> str:
+        return obj.report_document.name if obj.report_document else "Not generated"

@@ -41,7 +41,7 @@ class DashboardAPITests(APITestCase):
             question=self.question,
             student=self.student,
             answer_text="Asymmetric cryptography uses mathematical key pairs.",
-            status=Submission.Status.EVALUATED,
+            status=Submission.Status.PENDING_TEACHER_REVIEW,
         )
 
         self.evaluation = Evaluation.objects.create(
@@ -67,9 +67,15 @@ class DashboardAPITests(APITestCase):
         self.assertEqual(metrics["total_questions"], 1)
         self.assertEqual(metrics["total_submissions"], 1)
         self.assertEqual(metrics["pending_reviews"], 1)
+        self.assertEqual(metrics["evaluated_submissions"], 1)
 
     def test_student_dashboard_metrics(self):
-        """Test student dashboard returns aggregated real metrics."""
+        """Test student dashboard returns aggregated real metrics for published evaluations."""
+        from django.utils import timezone
+        self.evaluation.published_at = timezone.now()
+        self.evaluation.save()
+        self.submission.status = Submission.Status.PUBLISHED
+        self.submission.save(update_fields=["status"])
         self.client.force_authenticate(user=self.student)
         response = self.client.get(self.student_dash_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -77,7 +83,23 @@ class DashboardAPITests(APITestCase):
         metrics = response.data["data"]["metrics"]
         self.assertEqual(metrics["total_submissions"], 1)
         self.assertEqual(metrics["evaluated_count"], 1)
+        self.assertEqual(metrics["reviewed_count"], 1)
         self.assertEqual(metrics["average_score_percentage"], 80.0)
+
+    def test_student_dashboard_metrics_excludes_unpublished_scores(self):
+        """Test student dashboard does not expose marks or average scores before publish."""
+        self.evaluation.published_at = None
+        self.evaluation.save()
+        self.client.force_authenticate(user=self.student)
+        response = self.client.get(self.student_dash_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        metrics = response.data["data"]["metrics"]
+        self.assertEqual(metrics["average_score_percentage"], 0.0)
+        self.assertEqual(metrics["evaluated_count"], 1)
+        self.assertEqual(metrics["reviewed_count"], 0)
+        recent = response.data["data"]["recent_submissions"]
+        self.assertEqual(len(recent), 1)
+        self.assertIsNone(recent[0]["evaluation"])
 
     def test_student_forbidden_from_teacher_dashboard(self):
         """Test student receives 403 when requesting teacher dashboard."""

@@ -23,7 +23,13 @@ def dashboard_callback(request, context: dict) -> dict:
     total_questions = Question.objects.count()
     total_submissions = Submission.objects.count()
     pending_evaluations = Submission.objects.filter(
-        status=Submission.Status.SUBMITTED
+        status__in=[
+            Submission.Status.UPLOADED,
+            Submission.Status.PROCESSING,
+            Submission.Status.AI_EVALUATED,
+            Submission.Status.PENDING_TEACHER_REVIEW,
+            Submission.Status.FAILED,
+        ]
     ).count()
     completed_evaluations = Evaluation.objects.count()
 

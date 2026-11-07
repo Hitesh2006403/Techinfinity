@@ -34,3 +34,4 @@ db.sqlite3
 *.log
 staticfiles/
 media/
+e2e_screenshots/
